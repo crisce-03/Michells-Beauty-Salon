@@ -1,11 +1,10 @@
 "use client"
 
 interface ServicesStepProps {
-  onNext: () => void;
   onBack: ()=> void;
 }
 
-export default function DateStep({ onNext,onBack }: ServicesStepProps) {
+export default function DateStep({ onBack }: ServicesStepProps) {
   return (
 
 <div className="w-full max-w-[960px]  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 p-8">
