@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  /* Variables de colores */
+  --primary: #f2b90d;
+  --background-light: #f8f8f5;
+  --background-dark: #000000;
+  --surface-dark: #1a1a1a;
+  --surface-input: #121212;
+  --border-dark: #333333;
+  --text-muted: #cbbc90;
+  --cream-label: #E8E0C5;
+  
+  
+  /* Mantengo tus variables anteriores por si las usas en otro lado */
+  --color-luxury-black: #0a0a05;
+}
+
+@theme {
+  /* Registro de colores para que Tailwind genere las clases bg-, text-, border- */
+  --color-primary: var(--primary);
+  --color-background-light: var(--background-light);
+  --color-background-dark: var(--background-dark);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-input: var(--surface-input);
+  --color-border-dark: var(--border-dark);
+  --color-text-muted: var(--text-muted);
+  --color-cream-label: var(--cream-label);
+  --color-luxury-black: var(--color-luxury-black);
+
+  /* Fuentes */
+  --font-display: var(--font-epilogue);
+  --font-signature: var(--font-sofia);
+}
+
+/* Estilos Globales */
+body {
+  font-family: var(--font-epilogue), sans-serif !important;
+  background-color: var(--background-dark) !important;
+  color: var(--background-light) !important;
+}
+
+.font-signature {
+  font-family: var(--font-sofia), cursive !important;
+}
+
+/* --- Tus otros estilos (Scrollbar, efectos, etc.) --- */
+
+.hero-video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.glow-text {
+  text-shadow: 0 0 15px rgba(242, 185, 13, 0.6);
+}
+
+.nav-blur {
+  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.logos-sociales {
+  width: 35px;
+  height: 35px;
+  margin-top: 5px;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: #493f22;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(242, 185, 13, 0.5);
+}
+
