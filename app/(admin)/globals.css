@@ -10,6 +10,7 @@
   --border-dark: #333333;
   --text-muted: #cbbc90;
   --cream-label: #E8E0C5;
+  --danger: #ef4444;
   
   
   /* Mantengo tus variables anteriores por si las usas en otro lado */
@@ -27,7 +28,7 @@
   --color-text-muted: var(--text-muted);
   --color-cream-label: var(--cream-label);
   --color-luxury-black: var(--color-luxury-black);
-
+  --color-danger: var(--danger);
   /* Fuentes */
   --font-display: var(--font-epilogue);
   --font-signature: var(--font-sofia);
@@ -84,5 +85,14 @@ body {
 
 .text-glow {
   text-shadow: 0 0 10px rgba(242, 185, 13, 0.5);
+}
+
+/* Clase personalizada para el botón de eliminar */
+.btn-delete-hover {
+  transition: all 0.2s ease-in-out;
+}
+.btn-delete-hover:hover {
+  color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
 }
 
