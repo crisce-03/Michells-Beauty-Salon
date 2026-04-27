@@ -28,7 +28,7 @@ export default function Services(){
         {/* Servicio 2 */}
         <div className="bg-[#fdfcf5] p-10 rounded-xl space-y-6 transform hover:-translate-y-2 transition-all duration-300 shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
         <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
-        <span className="material-icons text-primary text-3xl p-3"><img src="uñasIcon.png" alt="uñasIcono" /></span>
+        <span className="material-icons text-primary text-3xl p-3"><img src="unasIcon.png" alt="unasIcono" /></span>
         </div>
         <h4 className="text-2xl font-bold text-luxury-black">Uñas Acrílicas</h4>
         <p className="text-luxury-black/70 leading-relaxed">Expertos en colorimetría, cortes de tendencia y tratamientos de nutrición capilar avanzada.</p>

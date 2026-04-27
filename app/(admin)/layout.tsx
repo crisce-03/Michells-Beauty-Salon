@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Epilogue, Sofia } from "next/font/google";
 import "./globals.css";
 import "./style.css";
+import Footer from "@/components/layout/Footer";
 
 // Configuración de Epilogue (Fuente de cuerpo y títulos)
 const epilogue = Epilogue({
@@ -28,18 +29,9 @@ export default function LoginLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-
-      <head>
-        {/* Importamos los iconos que no vienen en next/font */}
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-      </head>
-      <body
-        className={`${epilogue.variable} ${sofia.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <div className="bg-luxury-black min-h-screen flex flex-col">
+      <main className="flex-1">{children}</main>
+   
+    </div>
   );
 }

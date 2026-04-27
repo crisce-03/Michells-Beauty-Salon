@@ -1,18 +1,18 @@
 "use client"
 
 import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import MyWork from "@/components/MyWork";
-import Services from "@/components/Services";
-import BannerReserve from "@/components/BannerReserve";
-import Contacto from "@/components/Contacto";
-import AboutMe from "@/components/AboutMe";
-import Footer from "@/components/Footer";
-import DateStep from "@/components/ui/ReserveComponents/DateStep";
-import ServicesStep from "@/components/ui/ReserveComponents/ServicesStep";
-import DatsStep from "@/components/ui/ReserveComponents/DatsStep";
-import PayStep from "@/components/ui/ReserveComponents/PayStep";
+import Navbar from "@/components/layout/Navbar";
+import Hero from "@/features/landing/components/Hero";
+import MyWork from "@/features/landing/components/MyWork";
+import Services from "@/features/landing/components/Services";
+import BannerReserve from "@/features/landing/components/BannerReserve";
+import Contacto from "@/features/landing/components/Contacto";
+import AboutMe from "@/features/landing/components/AboutMe";
+import Footer from "@/components/layout/Footer";
+import DateStep from "@/features/reserve/DateStep";
+import ServicesStep from "@/features/reserve/ServicesStep";
+import DatsStep from "@/features/reserve/DatsStep";
+import PayStep from "@/features/reserve/PayStep";
 import ProgressBar from "@/components/ui/progresBar";
 import { useState } from "react";
 
@@ -37,8 +37,6 @@ export default function Reserve() {
 
   return (
     <div className="bg-luxury-black min-h-screen">
-      {/* El Navbar suele ir fuera del <main> para que sea fijo */}
-      <Navbar />
       <main className="flex flex-col items-center">
        <ProgressBar currentStep={step} setStep={setStep} />
 
@@ -47,7 +45,6 @@ export default function Reserve() {
           {renderStep()}
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
