@@ -35,9 +35,9 @@ export default function MyWork(){
         </div>
         <div className="group relative overflow-hidden rounded-xl h-[500px]">
             <div className="imgBox">
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="uñas1.jpg"/>
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="uñas2.jpg"/>
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="uñas3.jpg"/>
+                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="unas1.jpg"/>
+                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="unas2.jpg"/>
+                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="unas3.jpg"/>
             </div>
         
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/90 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity">

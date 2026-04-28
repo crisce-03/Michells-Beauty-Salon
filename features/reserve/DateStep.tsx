@@ -11,7 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
-import ProgressBar from "../progresBar";
+import ProgressBar from "../../components/ui/progresBar";
 
 interface ServicesStepProps {
   onNext: () => void;
