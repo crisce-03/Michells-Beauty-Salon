@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Epilogue, Sofia } from "next/font/google";
 import "./globals.css";
 import "./head.css";
+import { Toaster } from "sonner";
 
 const epilogue = Epilogue({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
         </head>
       <body className={`${epilogue.variable} ${sofia.variable} antialiased`}>
         {children}
+        <Toaster theme="dark" richColors  position="bottom-right" />
       </body>
     </html>
   );

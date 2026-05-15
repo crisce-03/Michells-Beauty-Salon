@@ -5,4 +5,6 @@ export type Service = {
   precio: string;
   duracion: string;
   estado: "Activo" | "Inactivo";
-};
+  imagen: File | null; 
+  image_url: string | null;
+};  

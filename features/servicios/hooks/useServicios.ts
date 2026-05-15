@@ -22,11 +22,14 @@ export function useServicios() {
 
   const [formData, setFormData] = useState({
     nombre: "",
-    categoria: "Cabello",
+    categoria: "Uñas",
     precio: "",
     duracion: "",
     estado: "Activo",
+    imagen: null,   
   });
+
+  const[previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
 
   // ================= EDIT =================
   const [editOpen, setEditOpen] = useState(false);
@@ -35,10 +38,12 @@ export function useServicios() {
   const [editFormData, setEditFormData] = useState<Service>({
     id: 0,
     nombre: "",
-    categoria: "Cabello",
+    categoria: "Uñas",
     precio: "",
     duracion: "",
     estado: "Activo",
+    imagen: null,   
+    image_url: "",
   });
 
   // ================= DELETE =================
@@ -79,20 +84,36 @@ export function useServicios() {
     setErrorMsg("");
 
     try {
-      const data = await createServicio(formData);
+      const datosParaEnviar = new FormData();
+
+      // 2. Agregamos todos los campos de texto
+      datosParaEnviar.append("nombre", formData.nombre);
+      datosParaEnviar.append("categoria", formData.categoria);
+      datosParaEnviar.append("precio", formData.precio);
+      datosParaEnviar.append("duracion", formData.duracion);
+      datosParaEnviar.append("estado", formData.estado);
+
+      // 3. Agregamos la imagen (solo si el usuario seleccionó una)
+      if (formData.imagen) {
+        datosParaEnviar.append("imagen", formData.imagen);
+      }
+      const data = await createServicio(datosParaEnviar);
 
       setOpen(false);
       setFormData({
         nombre: "",
-        categoria: "Cabello",
+        categoria: "Uñas",
         precio: "",
         duracion: "",
         estado: "Activo",
+        imagen: null,
       });
+      setPreviewImageUrl("");
 
       fetchServices();
 
       toast.success("Servicio creado");
+      setPreviewImageUrl("");
     } catch (err: any) {
       setErrorMsg(err.message);
     } finally {
@@ -104,22 +125,48 @@ export function useServicios() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const target = e.target;
+
+    if (target.type === "file") {
+      const fileInput = target as HTMLInputElement;
+      const file = fileInput.files?.[0];
+      setFormData((prev) => ({ ...prev, [target.name]: file }));
+
+      if (file) {
+        setPreviewImageUrl(URL.createObjectURL(file));
+      } else {
+        setPreviewImageUrl("");
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [target.name]: target.value }));
+    }
   };
 
   // ================= CHANGE (EDIT) =================
   const handleEditChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = e.target;
-    setEditFormData((prev) => ({ ...prev, [name]: value }));
+    const target = e.target;
+    if (target.type === "file") {
+      const fileInput = target as HTMLInputElement;
+      const file = fileInput.files?.[0];
+      setEditFormData((prev) => ({ ...prev, [target.name]: file }));
+
+      if (file) {
+        setPreviewImageUrl(URL.createObjectURL(file));
+      } else {
+        setPreviewImageUrl("");
+      }
+    } else {
+      setEditFormData((prev) => ({ ...prev, [target.name]: target.value }));
+    }
   };
 
   // ================= EDIT =================
   const openEditDialog = (service: Service) => {
     setEditFormData(service);
     setEditOpen(true);
+    setPreviewImageUrl(service.image_url);
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -127,10 +174,24 @@ export function useServicios() {
     setIsEditSubmitting(true);
 
     try {
-      const data = await updateServicio(editFormData.id, editFormData);
+      const datosParaEnviar = new FormData();
+
+      datosParaEnviar.append("id", editFormData.id.toString());
+      datosParaEnviar.append("nombre", editFormData.nombre);
+      datosParaEnviar.append("categoria", editFormData.categoria);
+      datosParaEnviar.append("precio", editFormData.precio);
+      datosParaEnviar.append("duracion", editFormData.duracion);
+      datosParaEnviar.append("estado", editFormData.estado);
+
+      // 3. Agregamos la imagen (solo si el usuario seleccionó una)
+      if (editFormData.imagen) {
+        datosParaEnviar.append("imagen", editFormData.imagen);
+      }
+      const data = await updateServicio(editFormData.id, datosParaEnviar);
       setEditOpen(false);
       fetchServices();
       toast.success("Servicio actualizado");
+      setPreviewImageUrl("");
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -208,6 +269,7 @@ export function useServicios() {
     isSubmitting,
     errorMsg,
     handleSubmit,
+    previewImageUrl,
 
     // edit
     editOpen,

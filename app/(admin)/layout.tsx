@@ -3,6 +3,8 @@ import { Epilogue, Sofia } from "next/font/google";
 import "./globals.css";
 import "./style.css";
 import Footer from "@/components/layout/Footer";
+import { Toaster } from "sonner";
+
 
 // Configuración de Epilogue (Fuente de cuerpo y títulos)
 const epilogue = Epilogue({
@@ -31,7 +33,7 @@ export default function LoginLayout({
   return (
     <div className="bg-luxury-black min-h-screen flex flex-col">
       <main className="flex-1">{children}</main>
-   
+      <Toaster />
     </div>
   );
 }

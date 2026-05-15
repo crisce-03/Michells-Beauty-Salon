@@ -45,7 +45,7 @@ export default function ServiciosPage() {
     handleSubmit,
     isSubmitting,
     errorMsg,
-
+    previewImageUrl,
     // editar
     editOpen,
     setEditOpen,
@@ -75,6 +75,7 @@ export default function ServiciosPage() {
           handleSubmit={handleSubmit}
           isSubmitting={isSubmitting}
           errorMsg={errorMsg}
+          previewImageUrl={previewImageUrl}
         />
       </HeaderServicios>
 
@@ -111,6 +112,7 @@ export default function ServiciosPage() {
         handleEditChange={handleEditChange}
         handleUpdate={handleUpdate}
         isEditSubmitting={isEditSubmitting}
+        previewImageUrl={previewImageUrl}
       />
 
       <DeleteServicioDialog

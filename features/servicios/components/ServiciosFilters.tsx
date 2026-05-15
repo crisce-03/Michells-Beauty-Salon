@@ -31,11 +31,10 @@ export default function ServiciosFilters({ filtroCategoria, setFiltroCategoria, 
                 className="appearance-none cursor-pointer rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-8 text-sm font-medium text-gray-700 outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-surface-input dark:border-border-dark dark:text-cream-label"
               >
                 <option value="Todas">Categoría: Todas</option>
-                <option value="Cabello">Cabello</option>
                 <option value="Uñas">Uñas</option>
-                <option value="Maquillaje">Maquillaje</option>
-                <option value="Piel">Piel</option>
-                <option value="Barba">Barba</option>
+                <option value="Pestañas">Pestañas</option>
+                <option value="Acripie">Acripie</option>
+                <option value="Cejas">Cejas</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-primary text-[20px]">
                 expand_more

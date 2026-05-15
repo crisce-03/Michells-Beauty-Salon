@@ -15,11 +15,7 @@ export default function BannerReserve() {
         <a className="inline-flex items-center bg-luxury-black text-white px-10 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform" href="https://wa.me/#">
         <span className="material-icons mr-2">calendar_today</span>
                         Agendar por WhatsApp
-                    </a>
-        <a className="inline-flex items-center bg-luxury-black text-white px-10 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform ml-5" href="/reserve">
-        <span className="material-icons mr-2">calendar_today</span>
-                        Agendar en la Web
-                    </a>
+                    </a>  
         </div>
         </section>
     );

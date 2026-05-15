@@ -33,14 +33,6 @@ export default function HorariosHeader({guardarCambios, onVerHistorial, loading}
               </div>
               <div className="flex gap-3">
                 <button 
-                onClick={onVerHistorial}
-                className="inline-flex items-center justify-center rounded-lg border border-primary px-5 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 transition-all gap-2">
-                  <span className="material-symbols-outlined text-[20px]">
-                    history
-                  </span>
-                  Ver Historial
-                </button>
-                <button 
                 onClick={guardarCambios}
                 disabled={loading}
                 className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-luxury-black shadow-lg shadow-primary/20 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all gap-2">
