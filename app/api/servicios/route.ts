@@ -25,10 +25,45 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nombre, categoria, precio, estado, duracion } = await req.json();
+    const formData = await req.formData();
+
+    const nombre = formData.get("nombre") as string;
+    const categoria = formData.get("categoria") as string;
+    const precio = formData.get("precio") as string;
+    const estado = formData.get("estado") as string;
+    const duracion = formData.get("duracion") as string;
+    const image = formData.get("imagen") as File | null;
 
     if (!nombre || !categoria || !precio || !estado) {
       return Response.json({ error: "Datos Necesarios" }, { status: 400 });
+    }
+
+    let imageUrl = "";
+    if (image && image.size > 0) {
+      const fileBuffer = await image.arrayBuffer();
+
+      const cleanFileName = image.name.replace(/[^a-zA-Z0-9.]/g, "_");
+      const fileName = `${Date.now()}-${cleanFileName}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("Servicios")
+        .upload(fileName, fileBuffer, {
+          contentType: image.type,
+          upsert: false,
+        });
+
+      if (uploadError) {
+        return Response.json(
+          { error: "Error al subir la imagen" },
+          { status: 500 },
+        );
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("Servicios")
+        .getPublicUrl(fileName);
+
+      imageUrl = publicUrlData.publicUrl;
     }
 
     const duracionFinal = duracion === "" ? null : duracion;
@@ -41,6 +76,7 @@ export async function POST(req: NextRequest) {
         precio,
         estado,
         duracion: duracionFinal,
+        image_url: imageUrl,
       })
       .select();
 
@@ -70,23 +106,56 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    const { nombre, categoria, precio, estado, duracion } = await req.json();
+    const formData = await req.formData();
+
+    const nombre = formData.get("nombre") as string;
+    const categoria = formData.get("categoria") as string;
+    const precio = formData.get("precio") as string;
+    const estado = formData.get("estado") as string;
+    const duracion = formData.get("duracion") as string;
+    const image = formData.get("imagen") as File | null;
 
     if (!nombre || !categoria || !precio || !estado) {
       return Response.json({ error: "Datos Necesarios" }, { status: 400 });
     }
-
     const duracionFinal = duracion === "" ? null : duracion;
+    const updateData: any = {
+      nombre,
+      categoria,
+      precio,
+      estado,
+      duracion: duracionFinal,
+    };
+
+    if (image && image.size > 0) {
+      const fileBuffer = await image.arrayBuffer();
+      const fileName = `${Date.now()}-${image.name}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("Servicios")
+        .upload(fileName, fileBuffer, {
+          contentType: image.type,
+          upsert: false,
+        });
+
+      if (uploadError) {
+        return Response.json(
+          { error: "Error al subir la imagen" },
+          { status: 500 },
+        );
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("Servicios")
+        .getPublicUrl(fileName);
+
+      // Agregamos la nueva URL al objeto de actualización
+      updateData.image_url = publicUrlData.publicUrl;
+    }
 
     const { data, error } = await supabase
       .from("Servicios")
-      .update({
-        nombre,
-        categoria,
-        precio,
-        estado,
-        duracion: duracionFinal,
-      })
+      .update(updateData)
       .eq("id", id)
       .select();
 

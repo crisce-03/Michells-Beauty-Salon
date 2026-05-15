@@ -9,7 +9,7 @@ type Props = {
   irPaginaSiguiente: () => void;
   irPaginaAnterior: () => void;
 
-   totalItems: number;
+  totalItems: number;
   itemsPorPagina: number;
 };
 
@@ -24,7 +24,7 @@ export default function ServiciosTable({
   totalItems,
   itemsPorPagina,
 }: Props) {
-     const indiceInicio = (paginaActual - 1) * itemsPorPagina;
+  const indiceInicio = (paginaActual - 1) * itemsPorPagina;
   const indiceFin = paginaActual * itemsPorPagina;
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden dark:bg-surface-dark dark:border-border-dark">
@@ -71,12 +71,28 @@ export default function ServiciosTable({
                 key={service.id}
                 className={`hover:bg-gray-50 dark:hover:bg-surface-input/50 transition-colors ${service.estado === "Inactivo" ? "opacity-75" : ""}`}
               >
-                <td className="px-6 py-4">
-                  <div className="font-medium text-gray-900 dark:text-cream-label">
-                    {service.nombre}
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-text-muted italic">
-                    {service.categoria}
+                <td className="px-6 py-4 flex items-center gap-4">
+                  {service.image_url ? (
+                    <img
+                      src={service.image_url}
+                      alt={`Imagen de ${service.nombre}`}
+                      className="w-12 h-12 rounded-xl object-cover border border-border-dark shadow-sm"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-surface-input flex items-center justify-center border border-border-dark">
+                      <span className="material-symbols-outlined text-gray-500 text-xl">
+                        image
+                      </span>
+                    </div>
+                  )}
+
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-cream-label">
+                      {service.nombre}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-text-muted italic">
+                      {service.categoria}
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -142,7 +158,7 @@ export default function ServiciosTable({
               </span>{" "}
               de{" "}
               <span className="font-medium text-gray-900 dark:text-cream-label">
-                {totalItems}    
+                {totalItems}
               </span>{" "}
               servicios
             </p>

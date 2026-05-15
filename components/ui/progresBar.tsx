@@ -8,7 +8,7 @@ export default function ProgressBar({ currentStep, setStep }: ProgressBarProps) 
     { id: 1, label: "Servicios" },
     { id: 2, label: "Fecha y Hora" },
     { id: 3, label: "Información" },
-    { id: 4, label: "Pago" },
+    { id: 4, label: "Confirmación" },
   ];
 
   return (

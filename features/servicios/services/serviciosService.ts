@@ -7,11 +7,10 @@ export const getServicios = async () => {
   return data;
 };
 
-export const createServicio = async (formData: any) => {
+export const createServicio = async (datosParaEnviar: FormData) => {
   const res = await fetch("/api/servicios", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
+    body: datosParaEnviar,
   });
 
   const data = await res.json();
@@ -19,11 +18,10 @@ export const createServicio = async (formData: any) => {
   return data;
 };
 
-export const updateServicio = async (id: number, dataUpdate: any) => {
+export const updateServicio = async (id: number, dataUpdate: FormData) => {
   const res = await fetch(`/api/servicios?id=${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dataUpdate),
+    body: dataUpdate,
   });
 
   const data = await res.json();

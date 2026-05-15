@@ -38,7 +38,7 @@ export default function SobreMi() {
           </p>
 
           <a
-            href="#contacto"
+            href="https://wa.me/50369303080"
             className="inline-block bg-yellow-500 text-black font-semibold px-8 py-3 rounded-full transition hover:bg-yellow-400"
           >
             Agenda tu cita
