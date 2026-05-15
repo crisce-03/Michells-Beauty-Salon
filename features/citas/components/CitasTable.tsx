@@ -50,24 +50,13 @@ export default function CitasTable({ citas }: Props) {
                 <tr key={cita.id} className="hover:bg-gray-50 dark:hover:bg-surface-input/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      {cita.avatar ? (
-                        <div className="size-9 rounded-full bg-cover bg-center ring-1 ring-primary/30" style={{ backgroundImage: `url('${cita.avatar}')` }}></div>
-                      ) : (
-                        <div className="size-9 rounded-full bg-green-100 flex items-center justify-center text-green-700 text-xs font-bold dark:bg-primary/20 dark:text-primary ring-1 ring-primary/30">
-                          {appt.initials}
-                        </div>
-                      )}
-                      <div className="font-medium text-gray-900 dark:text-cream-label">{cita.name}</div>
+                      <div className="font-medium text-gray-900 dark:text-cream-label">{cita.personalData.fullname}</div>
                     </div>
                   </td>
+
+                  <td className="px-6 py-4 text-gray-900 dark:text-cream-label font-medium">{cita.fecha_hora}</td>    
                   <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900 dark:text-cream-label">{appt.service}</div>
-                    <div className="text-xs text-gray-500 dark:text-text-muted">{appt.duration} duración</div>
-                  </td>
-                  <td className="px-6 py-4 text-gray-900 dark:text-cream-label font-medium">{appt.date}</td>
-                  <td className="px-6 py-4 text-gray-500 dark:text-primary">{appt.time}</td>
-                  <td className="px-6 py-4">
-                    <StatusBadge status={appt.status} />
+             
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">

@@ -3,6 +3,7 @@ import { PersonalData } from "../../reserve/types/reserva.types";
 
 
 export interface Cita{
+  id: number;
   personalData: PersonalData;
   services: Service[];
   totalPrice: number;

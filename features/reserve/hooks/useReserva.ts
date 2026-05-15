@@ -44,6 +44,7 @@ export function useReserva() {
   });
 
   const [cita, setCita] = useState<Cita>({
+    id: 0,
     personalData: {
       fullname: "",
       email: "",
