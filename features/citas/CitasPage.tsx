@@ -20,9 +20,53 @@ interface Appointment {
 }
 
 import CitasTable from "@/features/citas/components/CitasTable";
+import { useCitas } from "@/features/citas/hooks/useCitas";
+
 // --- DATOS DE EJEMPLO ---
 
 export default function CitasPage() {
+  const { 
+    citas,
+    loading,
+
+    open,
+    setOpen,
+    formData,
+    setFormData,
+    isSubmitting,
+    errorMsg,
+
+    editOpen,
+    setEditOpen,
+    editFormData,
+    setEditFormData,
+    isEditSubmitting,
+    openEditDialog,
+    handleUpdate,
+    handleEditChange,
+
+
+    deleteOpen,
+    setDeleteOpen,
+    deleteId,
+
+    filtroEstado,
+    setFiltroEstado,
+    citasFiltrados,
+    /*
+    totalCitas: citas.length,
+    activos: citas.filter((c) => c.estado === "Activo").length,
+    inactivos: citas.filter((c) => c.estado === "Inactivo").length,
+    */
+    citasActuales,
+
+    paginaActual,
+    setPaginaActual,
+    totalPaginas,
+    irPagina,
+    irPaginaSiguiente,
+    irPaginaAnterior,
+    itemsPorPagina: ITEMS_POR_PAGINA, } = useCitas();
   return (
     <div className="mx-auto max-w-7xl space-y-8">
       
@@ -38,7 +82,11 @@ export default function CitasPage() {
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-cream-label">Citas Programadas</h2>
             <p className="text-gray-500 dark:text-text-muted mt-1">Administra las reservas y horarios de tus clientes.</p>
           </div>
-          <button className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-luxury-black shadow-lg shadow-primary/20 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all gap-2">
+          <button 
+          onClick={() => {
+            window.location.href = "/reserve";
+          }}
+          className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-luxury-black shadow-lg shadow-primary/20 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all gap-2">
             <span className="material-symbols-outlined text-[20px]">add</span>
             Nueva Cita
           </button>
@@ -46,7 +94,16 @@ export default function CitasPage() {
       </div>
 
       {/* Contenedor de la Tabla */}
-      <CitasTable citas={[]}  />
+      <CitasTable 
+        paginaActual={paginaActual}
+        totalPaginas={totalPaginas}
+        irPaginaSiguiente={irPaginaSiguiente}
+        irPaginaAnterior={irPaginaAnterior}
+        totalItems={citasFiltrados.length}
+        itemsPorPagina={ITEMS_POR_PAGINA}
+        onEdit={openEditDialog}
+        citas={citasActuales} 
+      />
       
     </div>
   );

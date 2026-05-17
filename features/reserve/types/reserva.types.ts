@@ -8,9 +8,9 @@ export interface CitaBD{
 }
 
 export interface PersonalData {
-  fullname: string;
-  email: string;
-  phone: string;
-  requests: string;
+  nombre: string;
+  telefono: string;
+  correo: string;
+  observaciones: string;
 }
 

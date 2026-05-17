@@ -28,8 +28,8 @@ export default function FormDatosCliente({ data, onChange, onBack, onNext }: Pro
               <input
                 id="fullname"
                 type="text"
-                value={data.fullname}
-                onChange={(e) => onChange("fullname", e.target.value)}
+                value={data.nombre}
+                onChange={(e) => onChange("nombre", e.target.value)}
                 placeholder="Ej. María González"
                 className="block w-full pl-11 pr-4 py-3.5 bg-surface-input border border-border-dark rounded-xl text-white placeholder-text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary transition-colors sm:text-sm"
               />
@@ -48,8 +48,8 @@ export default function FormDatosCliente({ data, onChange, onBack, onNext }: Pro
               <input
                 id="email"
                 type="email"
-                value={data.email}
-                onChange={(e) => onChange("email", e.target.value)}
+                value={data.correo}
+                onChange={(e) => onChange("correo", e.target.value)}
                 placeholder="correo@ejemplo.com"
                 className="block w-full pl-11 pr-4 py-3.5 bg-surface-input border border-border-dark rounded-xl text-white placeholder-text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary transition-colors sm:text-sm"
               />
@@ -68,8 +68,8 @@ export default function FormDatosCliente({ data, onChange, onBack, onNext }: Pro
               <input
                 id="phone"
                 type="tel"
-                value={data.phone}
-                onChange={(e) => onChange("phone", e.target.value)}
+                value={data.telefono}
+                onChange={(e) => onChange("telefono", e.target.value)}
                 placeholder="0000-0000"
                 className="block w-full pl-4 pr-4 py-3.5 bg-transparent border-0 text-white placeholder-text-muted/50 focus:ring-0 sm:text-sm focus:outline-none"
               />
@@ -87,8 +87,8 @@ export default function FormDatosCliente({ data, onChange, onBack, onNext }: Pro
             </label>
             <textarea
               id="requests"
-              value={data.requests}
-              onChange={(e) => onChange("requests", e.target.value)}
+              value={data.observaciones}
+              onChange={(e) => onChange("observaciones", e.target.value)}
               placeholder="¿Tienes alguna alergia o preferencia que debamos saber?"
               rows={4}
               className="block w-full px-4 py-3.5 bg-surface-input border border-border-dark rounded-xl text-white placeholder-text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary transition-colors sm:text-sm resize-none"
@@ -107,7 +107,7 @@ export default function FormDatosCliente({ data, onChange, onBack, onNext }: Pro
           </button>
           <button
             onClick={onNext}
-            disabled={ !data.fullname }
+            disabled={ !data.nombre }
             className="w-full sm:flex-1 py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-background-dark font-bold text-base transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span>Continuar</span>

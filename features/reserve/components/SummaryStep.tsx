@@ -85,11 +85,11 @@ export default function SummaryStep({ onBack, onSave, selectedServices, totalPri
                     Datos del Cliente
                   </p>
                   <p className="font-bold text-slate-900 dark:text-white text-lg">
-                    {personalData.fullname}
+                    {personalData.nombre}
                   </p>
                   <p className="text-sm text-slate-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
                     <span className="material-symbols-outlined text-[14px]">call</span>
-                    {personalData.phone}
+                    {personalData.telefono}
                   </p>
                 </div>
               </div>

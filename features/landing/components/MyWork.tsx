@@ -12,7 +12,7 @@ export default function MyWork(){
         <h3 className="text-4xl md:text-5xl font-bold text-white">Mi Trabajo</h3>
         </div>
 
-        <Link href="/MyGalery">
+        <Link href="/gallery">
             <button
               className=" button-shadow bg-black border border-primary text-primary font-bold px-8 py-4 rounded-lg transition-all shadow-glow hover:bg-[#d6a644] hover:text-black">
               ➡ Ver toda la galería
