@@ -2,24 +2,43 @@ import { supabase } from "@/lib/supabaseServer";
 import { error } from "console";
 import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const { data, error } = await supabase
-      .from("Horarios")
-      .select("*")
-      .order("id", { ascending: true });
+    // 1. Extraemos el 'id' de los parámetros de la URL (?id=10)
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    // 2. Definimos la base de la consulta con todas las uniones (JOINs) necesarias
+    let query = supabase.from("Citas").select(`
+      *,
+      horario:Horarios (*),
+      servicios_detalle:Detalle_Citas (
+        *,
+        datos_servicio:Servicios (*)
+      )
+    `);
+
+    // 3. SI VIENE UN ID: Filtramos por ese registro específico y usamos .single()
+    if (id) {
+      const { data, error } = await query.eq("id", id).single();
+
+      if (error) {
+        return Response.json({ error: "Cita no encontrada o error en la base de datos" }, { status: 404 });
+      }
+      return Response.json(data);
+    }
+
+    // 4. SI NO VIENE UN ID: Traemos todas las citas ordenadas
+    const { data, error } = await query.order("id", { ascending: true });
 
     if (error) {
-      return Response.json(
-        { error: "Error al obtener los horarios" },
-        { status: 500 },
-      );
+      return Response.json({ error: error.message }, { status: 500 });
     }
 
     return Response.json(data);
+
   } catch (error) {
-    console.log(error);
-    return Response.json({ error: "Server Error" }, { status: 500 });
+    return Response.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }
 
@@ -75,29 +94,33 @@ export async function PUT(req: NextRequest) {
 
     if (!id) {
       return Response.json(
-        { error: "Falta el ID del servicio" },
+        { error: "Falta el ID de la cita" },
         { status: 400 },
       );
     }
 
-    const { fecha_hora, estado } = await req.json();
+    // Usamos id_horario para que coincida con la tabla Citas de tu base de datos
+    const { id_horario, estado, observaciones } = await req.json();
 
-    if (!fecha_hora || !estado) {
-      return Response.json({ error: "Datos Necesarios" }, { status: 400 });
+    // Creamos un objeto dinámico solo con los datos que se enviaron
+    const updateData: any = {};
+    if (id_horario !== undefined) updateData.id_horario = id_horario;
+    if (estado !== undefined) updateData.estado = estado;
+    if (observaciones !== undefined) updateData.observaciones = observaciones;
+
+    if (Object.keys(updateData).length === 0) {
+      return Response.json({ error: "No hay datos para actualizar" }, { status: 400 });
     }
 
     const { data, error } = await supabase
-      .from("Horarios")
-      .update({
-        fecha_hora,
-        estado,
-      })
+      .from("Citas")
+      .update(updateData) // Pasamos el objeto dinámico
       .eq("id", id)
       .select();
 
     if (error) {
       return Response.json(
-        { error: "Error al actualizar el horario" },
+        { error: "Error al actualizar la cita" },
         { status: 500 },
       );
     }
@@ -116,25 +139,37 @@ export async function DELETE(req: NextRequest) {
 
     if (!id) {
       return Response.json(
-        { error: "Falta el ID del servicio" },
+        { error: "Falta el ID de la cita" },
         { status: 400 },
       );
     }
 
+    
+    const { error: errorDetalles } = await supabase
+      .from("Detalle_Citas")
+      .delete()
+      .eq("id_cita", id); // Asegúrate de que esta sea la columna correcta en Detalle_Citas
+
+    if (errorDetalles) {
+       console.log("Error al limpiar los detalles:", errorDetalles);
+       // Decides si retornar error o continuar de todos modos
+    }
+
+
     const { data, error } = await supabase
-      .from("Horarios")
+      .from("Citas")
       .delete()
       .eq("id", id)
       .select();
 
     if (error) {
       return Response.json(
-        { error: "Error al eliminar el horario" },
+        { error: "Error al eliminar la cita principal" },
         { status: 500 },
       );
     }
 
-    return Response.json({ mensaje: "Horario Eliminado Correctamente", data });
+    return Response.json({ mensaje: "Cita Eliminada Correctamente", data });
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Server Error" }, { status: 500 });

@@ -7,13 +7,16 @@ import { getServicios } from "../../../features/servicios/services/serviciosServ
 import { getHorarios } from "../../horarios/services/horariosService";
 import { Service } from "../../servicios/types/servicio.types";
 import { WorkingDay } from "../../horarios/types/horarios.types";
-import { PersonalData} from "../types/reserva.types";
+import { PersonalData } from "../types/reserva.types";
 import { Cita } from "../../citas/types/cita.types";
 import { CitaBD } from "../types/reserva.types";
-import { createCita } from "../../citas/services/citasService";
+import {
+  createCita,
+  updateCita,
+  deleteCita,
+} from "../../citas/services/citasService";
 
 export function useReserva() {
-
   // ================= SERVICIOS =================
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,23 +40,10 @@ export function useReserva() {
 
   // ================= DATOS PERSONALES =================
   const [personalData, setPersonalData] = useState<PersonalData>({
-    fullname: "",
-    email: "",
-    phone: "",
-    requests: ""
-  });
-
-  const [cita, setCita] = useState<Cita>({
-    id: 0,
-    personalData: {
-      fullname: "",
-      email: "",
-      phone: "",
-      requests: ""
-    },
-    services: [],
-    totalPrice: 0,
-    fecha_hora: ""
+    nombre: "",
+    correo: "",
+    telefono: "",
+    observaciones: "",
   });
 
   const [citaBD, setCitaBD] = useState<CitaBD[]>([]);
@@ -91,20 +81,22 @@ export function useReserva() {
   // ================= TRANSFORMAR HORARIOS POR SEMANA =================
   useEffect(() => {
     const semanaBase: WorkingDay[] = [
-      { id: "mon", name: "Lunes",     isActive: true,  timeSlots: [] },
-      { id: "tue", name: "Martes",    isActive: true,  timeSlots: [] },
-      { id: "wed", name: "Miércoles", isActive: true,  timeSlots: [] },
-      { id: "thu", name: "Jueves",    isActive: true,  timeSlots: [] },
-      { id: "fri", name: "Viernes",   isActive: true,  timeSlots: [] },
-      { id: "sat", name: "Sábado",    isActive: true,  timeSlots: [] },
-      { id: "sun", name: "Domingo",   isActive: false, timeSlots: [] },
+      { id: "mon", name: "Lunes", isActive: true, timeSlots: [] },
+      { id: "tue", name: "Martes", isActive: true, timeSlots: [] },
+      { id: "wed", name: "Miércoles", isActive: true, timeSlots: [] },
+      { id: "thu", name: "Jueves", isActive: true, timeSlots: [] },
+      { id: "fri", name: "Viernes", isActive: true, timeSlots: [] },
+      { id: "sat", name: "Sábado", isActive: true, timeSlots: [] },
+      { id: "sun", name: "Domingo", isActive: false, timeSlots: [] },
     ];
 
     const semanaLlena = semanaBase.map((dia, index) => {
-      const fecha    = addDays(semanaActual, index);
+      const fecha = addDays(semanaActual, index);
       const fechaStr = format(fecha, "yyyy-MM-dd");
-      const turnos   = horariosBD.filter((r) => r.fecha_hora.startsWith(fechaStr));
-      const horas    = turnos.map((r) => r.fecha_hora.substring(11, 16)).sort();
+      const turnos = horariosBD.filter((r) =>
+        r.fecha_hora.startsWith(fechaStr),
+      );
+      const horas = turnos.map((r) => r.fecha_hora.substring(11, 16)).sort();
       return { ...dia, timeSlots: horas };
     });
 
@@ -115,8 +107,9 @@ export function useReserva() {
   const serviciosFiltrados = useMemo(
     () =>
       services.filter((s) => {
-        const cat = filtroCategoria === "Todas" || s.categoria === filtroCategoria;
-        const est = filtroEstado   === "Todos"  || s.estado    === filtroEstado;
+        const cat =
+          filtroCategoria === "Todas" || s.categoria === filtroCategoria;
+        const est = filtroEstado === "Todos" || s.estado === filtroEstado;
         return cat && est;
       }),
     [filtroCategoria, filtroEstado, services],
@@ -130,50 +123,50 @@ export function useReserva() {
     setPersonalData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSaveCita = async () => {
+  // 👇 NUEVA FUNCIÓN: Asegura la sincronización mutua de la hora en tus componentes
+  const seleccionarHoraYHorario = (hora: string | null) => {
+    setSelectedTime(hora);
+  };
+
+  const handleSaveCita = async (editId?: string | null) => {
     try {
-      // 1. Encontrar el ID real del horario en tu base de datos (horariosBD)
       const fechaStr = format(selectedDate, "yyyy-MM-dd");
-      
-      // Buscamos el registro exacto que coincida con la fecha y la hora
-      const turnoEncontrado = horariosBD.find((turno) => 
-        turno.fecha_hora.startsWith(fechaStr) && 
-        turno.fecha_hora.includes(selectedTime || "")
+
+      const turnoEncontrado = horariosBD.find(
+        (turno) =>
+          turno.fecha_hora.startsWith(fechaStr) &&
+          turno.fecha_hora.includes(selectedTime || ""),
       );
 
       if (!turnoEncontrado) {
-        toast.error("Horario no válido", { 
-          description: "No pudimos encontrar el identificador de esta hora." 
+        toast.error("Horario no válido", {
+          description: "No pudimos encontrar el identificador de esta hora.",
         });
-        return false; // Retornamos false para saber que falló
+        return false;
       }
 
-      // 2. Construir el JSON exacto que espera tu API
       const payload = {
-        nombre: personalData.fullname,
-        telefono: personalData.phone,
-        correo: personalData.email,
-        id_horario: turnoEncontrado.id, // El ID numérico que viene de Supabase
+        nombre: personalData.nombre,
+        telefono: personalData.telefono,
+        correo: personalData.correo,
+        observaciones: personalData.observaciones, // Añadido para guardar en la BD
+        id_horario: turnoEncontrado.id, 
         total: totalPrice,
-        observaciones: personalData.requests,
-        // Mapeamos los servicios para enviar solo ID y Precio
         servicios: selectedServices.map((servicio) => ({
           id_servicio: servicio.id,
-          precio: servicio.precio
-        }))
+          precio: servicio.precio,
+        })),
       };
 
-      // 3. Hacer la petición a tu API Route (Ajusta la URL si es necesario)
-      const data = await createCita(JSON.stringify(payload));
-      setCitaBD([...citaBD, data]);
+      if (editId) {
+        await updateCita(Number(editId), payload);
+        toast.success("Cita actualizada correctamente");
+      } else {
+        await createCita(JSON.stringify(payload));
+        toast.success("Cita creada correctamente");
+      }
 
-      console.log("Data recibida:", data); // ← ¿Qué llega aquí?
-console.log("Llegó al toast?"); // ← ¿Aparece este log?
-
-      toast.success("¡Cita guardada con éxito!");
-      
-      return true; // Retornamos true para indicar éxito
-
+      return true; 
     } catch (error: any) {
       console.error(error);
       toast.error("Error al guardar", { description: error.message });
@@ -181,9 +174,51 @@ console.log("Llegó al toast?"); // ← ¿Aparece este log?
     }
   };
 
+  const cargarCitaParaEditar = async (id: string) => {
+    try {
+      const res = await fetch(`/api/citas?id=${id}`);
+      const cita = await res.json();
+
+      if (!res.ok) throw new Error(cita.error || "No se pudo cargar la cita");
+
+      const serviciosAPI =
+        cita.servicios_detalle?.map((s: any) => ({
+          id: s.id_servicio,
+          nombre: s.datos_servicio?.nombre || "Servicio",
+          precio: s.datos_servicio?.precio || 0,
+          categoria: s.datos_servicio?.categoria || "",
+          image_url: s.datos_servicio?.image_url || "",
+        })) || [];
+
+      setSelectedServices(serviciosAPI);
+      setTotalPrice(cita.total || 0);
+
+      setPersonalData({
+        nombre: cita.nombre || "",
+        telefono: cita.telefono || "",
+        correo: cita.correo || "",
+        observaciones: cita.observaciones || "",
+      });
+
+      if (cita.horario && cita.horario.fecha_hora) {
+        const stringFechaHora = cita.horario.fecha_hora; 
+
+        const fechaLimpia = stringFechaHora.substring(0, 10);
+        const fechaLocal = fechaLimpia.replace(/-/g, "\/");
+
+        setSelectedDate(new Date(fechaLocal)); 
+        setSelectedTime(stringFechaHora.substring(11, 16)); 
+      } else {
+        setSelectedDate(new Date());
+        setSelectedTime(""); 
+      }
+    } catch (error) {
+      console.error("Error al cargar la cita para edición:", error);
+    }
+  };
+
   // ================= RETURN =================
   return {
-    // Servicios
     services,
     setServices,
     loading,
@@ -191,24 +226,21 @@ console.log("Llegó al toast?"); // ← ¿Aparece este log?
     setSelectedServices,
     totalPrice,
     setTotalPrice,
-    // Filtros
     filtroCategoria,
     filtroEstado,
     setFiltroCategoria,
     setFiltroEstado,
     serviciosFiltrados,
-    // Horarios
     horarios,
     semanaActual,
     setSemanaActual,
-    // Fecha y hora
     selectedDate,
     setSelectedDate,
     selectedTime,
-    setSelectedTime,
-    // Datos personales
+    setSelectedTime: seleccionarHoraYHorario, // 👈 Interceptamos para usar la lógica segura
     personalData,
     handlePersonalDataChange,
     handleSaveCita,
+    cargarCitaParaEditar,
   };
 }

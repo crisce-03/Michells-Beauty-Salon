@@ -7,5 +7,15 @@ export interface Cita{
   personalData: PersonalData;
   services: Service[];
   totalPrice: number;
-  fecha_hora: string;
+  fecha: string;
+  hora: string;
+  observaciones: string;
+  estado: string;
+  id_horario: number;
+
+  horario?: {
+    id: number;
+    estado: string;
+    fecha_hora: string; // Aquí es donde viene el texto "2026-05-16T10:00:00..."
+  };
 }

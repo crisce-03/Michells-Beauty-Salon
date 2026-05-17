@@ -16,11 +16,14 @@ import SummaryStep from "@/features/reserve/components/SummaryStep";
 import ProgressBar from "@/components/ui/progresBar";
 import { useState } from "react";
 import { useReserva }  from "@/features/reserve/hooks/useReserva";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 
 export default function Reserve() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("editId");
   const {
     services,
     setServices,
@@ -42,9 +45,18 @@ export default function Reserve() {
     personalData,
     handlePersonalDataChange,
     handleSaveCita,
+    cargarCitaParaEditar,
   } = useReserva();
 
   const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    if (editId) {
+      // Si hay un ID, llamamos a una función de tu hook para que busque 
+      // esa cita en la base de datos y llene los estados (servicios, fecha, etc.)
+      cargarCitaParaEditar(editId);
+    }
+  }, [editId]);
 
   // --- 1. DEFINIMOS LAS REGLAS DE VALIDACIÓN ---
   // Paso 1: Debe haber al menos un servicio seleccionado
@@ -54,7 +66,7 @@ export default function Reserve() {
   const isValidStep2 = selectedDate !== null && selectedTime !== null;
   
   // Paso 3: Deben estar llenos los datos requeridos (ajusta las propiedades según tu objeto personalData)
-  const isValidStep3 = personalData?.fullname?.trim() !== "" ; 
+  const isValidStep3 = personalData?.nombre?.trim() !== "" ; 
 
   // --- 2. FUNCIÓN CONTROLADORA DE NAVEGACIÓN ---
   const handleStepChange = (targetStep: number) => {
@@ -118,7 +130,7 @@ export default function Reserve() {
           personalData={personalData}
           onBack={() => handleStepChange(3)} 
           onSave={async () => {
-            const exito = await handleSaveCita();
+            const exito = await handleSaveCita(editId);
             if (exito) {
               router.push("/dashboardAdmin/citas");
             }
