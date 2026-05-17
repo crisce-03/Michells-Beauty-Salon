@@ -1,5 +1,11 @@
+// app/(public)/Reserve/page.tsx
+import { Suspense } from "react";
 import ReservePage from "@/features/reserve/ReservePage";
 
 export default function Page() {
-  return <ReservePage />;
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <ReservePage />
+    </Suspense>
+  );
 }
