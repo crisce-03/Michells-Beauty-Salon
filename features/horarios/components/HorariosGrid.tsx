@@ -5,14 +5,16 @@ import HorarioCard from "./HorarioCard";
 
 type Props = {
   horarios: WorkingDay[];
+  horariosBD: any[];
   semanaActual: Date;
 
- agregarTurnoLocal: (dia: number) => void;
+  agregarTurnoLocal: (dia: number) => void;
   eliminarTurnoLocal: (dia: number, hora: number) => void;
   cambiarHoraLocal: (dia: number, hora: number, value: string) => void;
+  toggleDiaLocal: (dia: number) => void;
 };
 
-export default function HorariosGrid({horarios, semanaActual, agregarTurnoLocal, eliminarTurnoLocal, cambiarHoraLocal}: Props) {
+export default function HorariosGrid({horarios, horariosBD, semanaActual, agregarTurnoLocal, eliminarTurnoLocal, cambiarHoraLocal, toggleDiaLocal}: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {horarios.map((day, indexDia) => {
@@ -22,7 +24,7 @@ export default function HorariosGrid({horarios, semanaActual, agregarTurnoLocal,
         const nombreMes = format(fechaDelDia, "MMM", { locale: es });
 
         return (
-          <HorarioCard key={indexDia} day={day} indexDia={indexDia} numeroDia={numeroDia} nombreMes={nombreMes} semanaActual={semanaActual} agregarTurnoLocal={agregarTurnoLocal} eliminarTurnoLocal={eliminarTurnoLocal} cambiarHoraLocal={cambiarHoraLocal} />
+          <HorarioCard key={indexDia} day={day} indexDia={indexDia} numeroDia={numeroDia} nombreMes={nombreMes} semanaActual={semanaActual} horariosBD={horariosBD} agregarTurnoLocal={agregarTurnoLocal} eliminarTurnoLocal={eliminarTurnoLocal} cambiarHoraLocal={cambiarHoraLocal} toggleDiaLocal={toggleDiaLocal} />
         );  
       })}
     </div>

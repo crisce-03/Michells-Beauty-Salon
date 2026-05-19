@@ -46,6 +46,7 @@ export default function Reserve() {
     handlePersonalDataChange,
     handleSaveCita,
     cargarCitaParaEditar,
+    horariosBD,
   } = useReserva();
 
   const [step, setStep] = useState(1);
@@ -104,7 +105,7 @@ export default function Reserve() {
         return <DateStep 
           onNext={() => handleStepChange(3)} 
           onBack={() => handleStepChange(1)} 
-          horarios={horarios}
+          horariosBD={horariosBD}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           selectedTime={selectedTime}

@@ -42,6 +42,9 @@ export function useCitas() {
     estado: string;
     observaciones: string;
     id_horario: number | string;
+    correo: string;
+    total: number;
+    servicios: Service[];
   }>({
     id: 0,
     nombre: "",
@@ -49,11 +52,15 @@ export function useCitas() {
     estado: "PENDIENTE",
     observaciones: "",
     id_horario: "",
+    correo: "",
+    total: 0,
+    servicios: [] as Service[],
   });
 
   // ================= DELETE =================
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const [deleteNombre, setDeleteNombre] = useState("");
 
   // ================= FILTERS =================
   const [filtroEstado, setFiltroEstado] = useState("Todos");
@@ -62,7 +69,7 @@ export function useCitas() {
   const [paginaActual, setPaginaActual] = useState(1);
 
   // ================= FETCH =================
-  const fetchServices = async () => {
+  const fetchCitas = async () => {
     try {
       const data = await getCitas();
 
@@ -79,7 +86,7 @@ export function useCitas() {
             year: "numeric",
           });
 
-         horaSeparada = citaAPI.horario.fecha_hora.substring(11, 16);
+          horaSeparada = citaAPI.horario.fecha_hora.substring(11, 16);
         }
 
         const serviciosLimpios = citaAPI.servicios_detalle
@@ -104,7 +111,7 @@ export function useCitas() {
             correo: citaAPI.correo,
             observaciones: citaAPI.observaciones || "",
           },
-          totalPrice: citaAPI.total,
+          total: citaAPI.total,
           services: serviciosLimpios,
 
           fecha: fechaSeparada,
@@ -126,7 +133,7 @@ export function useCitas() {
   };
 
   useEffect(() => {
-    fetchServices();
+    fetchCitas();
     setPaginaActual(1);
   }, []);
 
@@ -145,21 +152,6 @@ export function useCitas() {
     setEditFormData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  // ================= 2. OPEN EDIT DIALOG =================
-
-  const openEditDialog = (cita: Cita) => {
-    setEditFormData({
-      id: cita.id,
-      nombre: cita.personalData.nombre,
-      telefono: cita.personalData.telefono || "",
-      estado: cita.estado || "PENDIENTE",
-      observaciones: cita.observaciones || "",
-      id_horario: cita.id_horario, // 👈 Ahora lo toma directamente sin errores
-    });
-
-    setEditOpen(true);
-  };
-
   // ================= 3. HANDLE UPDATE =================
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -167,24 +159,25 @@ export function useCitas() {
     setIsEditSubmitting(true);
 
     try {
-      // Como tu API PUT ahora usa `await req.json()`,
-      // enviamos un objeto de JavaScript normal en lugar de FormData
       const datosParaEnviar = {
         estado: editFormData.estado,
         observaciones: editFormData.observaciones,
         id_horario: editFormData.id_horario,
-
-        // Si más adelante adaptas tu backend para que también
-        // permita editar nombre y teléfono, ya van listos aquí:
         nombre: editFormData.nombre,
         telefono: editFormData.telefono,
+        correo: editFormData.correo,
+        total: editFormData.total,
+        servicios: editFormData.servicios.map((s) => ({
+          id_servicio: s.id,
+          precio: s.precio,
+        })),
       };
 
       // Llamamos a tu servicio pasándole el ID y el JSON
       const data = await updateCita(editFormData.id, datosParaEnviar);
 
       setEditOpen(false);
-      fetchServices(); // Recargamos la tabla
+      fetchCitas(); // Recargamos la tabla
       toast.success("Cita actualizada correctamente");
     } catch (err: any) {
       toast.error("Error al actualizar la cita", {
@@ -196,10 +189,9 @@ export function useCitas() {
   };
 
   // ================= DELETE =================
-  /*
   const openDeleteDialog = (id: number, nombre: string) => {
     setDeleteId(id);
-
+    setDeleteNombre(nombre);
     setDeleteOpen(true);
   };
 
@@ -208,14 +200,13 @@ export function useCitas() {
       const data = await deleteCita(deleteId);
 
       setDeleteOpen(false);
-      fetchServices();
+      fetchCitas();
 
       toast.success("Cita eliminada");
     } catch (err: any) {
       toast.error(err.message);
     }
   };
-  */
 
   // ================= FILTERS =================
   const citasFiltrados = useMemo(
@@ -226,6 +217,8 @@ export function useCitas() {
       }),
     [citas, filtroEstado],
   );
+
+  
 
   // ================= PAGINATION =================
   const ITEMS_POR_PAGINA = 5;
@@ -250,6 +243,17 @@ export function useCitas() {
     }
   };
 
+  const cambiarEstado = async (cita: Cita, nuevoEstado: string) => {
+  if (cita.estado === nuevoEstado) return;
+  try {
+    await updateCita(cita.id, { estado: nuevoEstado });
+    fetchCitas();
+    toast.success(`Cita marcada como ${nuevoEstado.toLowerCase()}`);
+  } catch (err: any) {
+    toast.error("Error al cambiar el estado", { description: err.message });
+  }
+};
+
   // ================= RETURN =================
   return {
     // data
@@ -270,7 +274,6 @@ export function useCitas() {
     editFormData,
     setEditFormData,
     isEditSubmitting,
-    openEditDialog,
     handleUpdate,
     handleEditChange,
 
@@ -278,6 +281,9 @@ export function useCitas() {
     deleteOpen,
     setDeleteOpen,
     deleteId,
+    deleteNombre,
+    handleDelete,
+    openDeleteDialog,
 
     // filters
     filtroEstado,
@@ -302,5 +308,6 @@ export function useCitas() {
     irPaginaSiguiente,
     irPaginaAnterior,
     itemsPorPagina: ITEMS_POR_PAGINA,
+    cambiarEstado,
   };
 }

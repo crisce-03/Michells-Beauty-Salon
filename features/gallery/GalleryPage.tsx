@@ -3,6 +3,7 @@ import { GallerySection } from "./components/GallerySection";
 import { CarouselGallery } from "./components/CarouselGallery";
 import { galleryData } from "./data/gallery.data";
 import { FloatingButton } from "./components/FloatingButton";
+import  BannerReserve  from "../gallery/components/BannerReserve";
 import { GridGallery } from "./components/GridGallery";
 
 export default function GalleryPage() {
@@ -27,6 +28,8 @@ export default function GalleryPage() {
           <GridGallery images={galleryData.cejasImages} grids={4} />
         </GallerySection>
       </section>
+
+      <BannerReserve />
 
       <FloatingButton />
     </>

@@ -6,7 +6,7 @@ export interface Cita{
   id: number;
   personalData: PersonalData;
   services: Service[];
-  totalPrice: number;
+  total: number;
   fecha: string;
   hora: string;
   observaciones: string;
