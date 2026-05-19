@@ -80,15 +80,21 @@ export function useReserva() {
 
   // ================= TRANSFORMAR HORARIOS POR SEMANA =================
   useEffect(() => {
+     console.log("horariosBD completo:", horariosBD);
+  console.log("semanaActual:", format(semanaActual, "yyyy-MM-dd"));
     const semanaBase: WorkingDay[] = [
-      { id: "mon", name: "Lunes", isActive: true, timeSlots: [] },
-      { id: "tue", name: "Martes", isActive: true, timeSlots: [] },
-      { id: "wed", name: "Miércoles", isActive: true, timeSlots: [] },
-      { id: "thu", name: "Jueves", isActive: true, timeSlots: [] },
-      { id: "fri", name: "Viernes", isActive: true, timeSlots: [] },
-      { id: "sat", name: "Sábado", isActive: true, timeSlots: [] },
+      { id: "mon", name: "Lunes", isActive: false, timeSlots: [] },
+      { id: "tue", name: "Martes", isActive: false, timeSlots: [] },
+      { id: "wed", name: "Miércoles", isActive: false, timeSlots: [] },
+      { id: "thu", name: "Jueves", isActive: false, timeSlots: [] },
+      { id: "fri", name: "Viernes", isActive: false, timeSlots: [] },
+      { id: "sat", name: "Sábado", isActive: false, timeSlots: [] },
       { id: "sun", name: "Domingo", isActive: false, timeSlots: [] },
     ];
+
+     horariosBD.forEach(r => {
+    console.log("fecha_hora raw:", r.fecha_hora, "| startsWith test:", r.fecha_hora.startsWith("2026-05-20"));
+  });
 
     const semanaLlena = semanaBase.map((dia, index) => {
       const fecha = addDays(semanaActual, index);
@@ -96,8 +102,24 @@ export function useReserva() {
       const turnos = horariosBD.filter((r) =>
         r.fecha_hora.startsWith(fechaStr),
       );
-      const horas = turnos.map((r) => r.fecha_hora.substring(11, 16)).sort();
-      return { ...dia, timeSlots: horas };
+
+      // Solo horas Activas — excluye Ocupado, Marcador y Cerrado
+      const horas = turnos
+        .filter((r) => r.estado === "Activo")
+        .map((r) => r.fecha_hora.substring(11, 16))
+        .sort();
+
+      // 👇 El día está activo si tiene cualquier registro (Marcador, Activo)
+      // pero NO si todos son Ocupado (sin horas disponibles)
+      const tieneHorasDisponibles = horas.length > 0;
+      const tieneMarcador = turnos.some((r) => r.estado === "Marcador");
+      const isActive = tieneHorasDisponibles || tieneMarcador;
+
+      return {
+        ...dia,
+        isActive,
+        timeSlots: horas,
+      };
     });
 
     setHorarios(semanaLlena);
@@ -150,7 +172,7 @@ export function useReserva() {
         telefono: personalData.telefono,
         correo: personalData.correo,
         observaciones: personalData.observaciones, // Añadido para guardar en la BD
-        id_horario: turnoEncontrado.id, 
+        id_horario: turnoEncontrado.id,
         total: totalPrice,
         servicios: selectedServices.map((servicio) => ({
           id_servicio: servicio.id,
@@ -166,7 +188,7 @@ export function useReserva() {
         toast.success("Cita creada correctamente");
       }
 
-      return true; 
+      return true;
     } catch (error: any) {
       console.error(error);
       toast.error("Error al guardar", { description: error.message });
@@ -182,7 +204,7 @@ export function useReserva() {
       if (!res.ok) throw new Error(cita.error || "No se pudo cargar la cita");
 
       const serviciosAPI =
-        cita.servicios_detalle?.map((s: any) => ({
+        cita.services?.map((s: any) => ({
           id: s.id_servicio,
           nombre: s.datos_servicio?.nombre || "Servicio",
           precio: s.datos_servicio?.precio || 0,
@@ -201,16 +223,16 @@ export function useReserva() {
       });
 
       if (cita.horario && cita.horario.fecha_hora) {
-        const stringFechaHora = cita.horario.fecha_hora; 
+        const stringFechaHora = cita.horario.fecha_hora;
 
         const fechaLimpia = stringFechaHora.substring(0, 10);
         const fechaLocal = fechaLimpia.replace(/-/g, "\/");
 
-        setSelectedDate(new Date(fechaLocal)); 
-        setSelectedTime(stringFechaHora.substring(11, 16)); 
+        setSelectedDate(new Date(fechaLocal));
+        setSelectedTime(stringFechaHora.substring(11, 16));
       } else {
         setSelectedDate(new Date());
-        setSelectedTime(""); 
+        setSelectedTime("");
       }
     } catch (error) {
       console.error("Error al cargar la cita para edición:", error);
@@ -242,5 +264,6 @@ export function useReserva() {
     handlePersonalDataChange,
     handleSaveCita,
     cargarCitaParaEditar,
+    horariosBD,
   };
 }

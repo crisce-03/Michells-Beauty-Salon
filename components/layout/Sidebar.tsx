@@ -2,11 +2,42 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createBrowserClient } from '@supabase/ssr'; // <-- Importamos Supabase
 
 export const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter(); // <-- Para redirigir al login al salir
   const [mobileOpen, setMobileOpen] = useState(false);
+  
+  // Estados para manejar los datos del usuario
+  const [userEmail, setUserEmail] = useState<string | null>("Cargando...");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Inicializamos Supabase
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  // 1. Efecto para obtener el usuario activo al cargar el componente
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserEmail(user.email ?? "Usuario");
+      }
+    };
+    fetchUser();
+  }, [supabase.auth]);
+
+  // 2. Función para cerrar sesión
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await supabase.auth.signOut();
+    router.refresh(); // Refrescamos para que el middleware detecte que ya no hay sesión
+    router.push("/login"); // Mandamos al login
+  };
 
   // Cierra el menú al cambiar de ruta
   useEffect(() => {
@@ -40,7 +71,6 @@ export const Sidebar = () => {
     { href: "/dashboardAdmin/servicios", icon: "spa", label: "Servicios" },
     { href: "/dashboardAdmin/horarios", icon: "schedule", label: "Horarios" },
     { href: "/dashboardAdmin/estadisticas", icon: "leaderboard", label: "Estadísticas" },
-    { href: "/dashboardAdmin/configuracion", icon: "settings", label: "Configuración" },
   ];
 
   const SidebarContent = () => (
@@ -85,30 +115,34 @@ export const Sidebar = () => {
         </button>
       </Link>
 
-      {/* Cerrar Sesión */}
-      <button className="flex items-center gap-3 w-full p-2 text-sm font-medium text-gray-500 dark:text-text-muted hover:text-[#ef4444] dark:hover:text-[#ef4444] hover:bg-[#ef4444]/10 rounded-lg transition-colors group justify-center">
+      {/* 🔄 Cerrar Sesión (Ahora ejecuta handleLogout) */}
+      <button 
+        onClick={handleLogout}
+        disabled={isLoggingOut}
+        className="flex items-center gap-3 w-full p-2 text-sm font-medium text-gray-500 dark:text-text-muted hover:text-[#ef4444] dark:hover:text-[#ef4444] hover:bg-[#ef4444]/10 rounded-lg transition-colors group justify-center disabled:opacity-50"
+      >
         <span className="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">
-          logout
+          {isLoggingOut ? "sync" : "logout"}
         </span>
-        <span>Cerrar Sesión</span>
+        <span>{isLoggingOut ? "Saliendo..." : "Cerrar Sesión"}</span>
       </button>
 
-      {/* Usuario */}
+      {/* 🔄 Usuario Dinámico */}
       <div className="border-t border-gray-200 dark:border-border-dark p-4">
         <div className="flex items-center gap-3 px-2">
           <div
-            className="size-10 rounded-full bg-cover bg-center ring-2 ring-primary/30"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQ1WbidZrntKtkeAySMeqsjT7o2QaMoFLaCFkDu6rk5SpkvCG1mU_AcWol542shNa90Z5UnLtbtVZBHAIrmMMGF-xypBNKZqo-oFEKJmPG436WZQJh9xX2Q5vbJ9ay6TLZoK3TMuNRMV0RxqPEdA0isYKzJm7cD7XGI4rQ-uSXk3nmSdBZ7yCitb8W_OLWJ-omFcToTrHyRCYczFOOVek3VD_xsj83ADXW9IUDtmWdZpcu6-uEz0ZbawZbyfNFM54aswUlFSXNCnA')",
-            }}
-          />
-          <div className="flex flex-col">
-            <p className="text-sm font-semibold text-gray-900 dark:text-primary">
-              Michell Admin
+            className="size-10 rounded-full bg-cover bg-center ring-2 ring-primary/30 flex items-center justify-center bg-surface-dark text-primary font-bold uppercase"
+          >
+            {/* Si no hay imagen de perfil en Supabase, mostramos la primera letra del correo */}
+            {userEmail !== "Cargando..." ? userEmail?.charAt(0) : "?"}
+          </div>
+          <div className="flex flex-col overflow-hidden">
+            <p className="text-sm font-semibold text-gray-900 dark:text-primary truncate">
+              {/* Extraemos el nombre antes del @, ej: admin@correo.com -> admin */}
+              {userEmail !== "Cargando..." ? userEmail?.split('@')[0] : "Cargando..."}
             </p>
-            <p className="text-xs text-gray-500 dark:text-text-muted">
-              Propietaria
+            <p className="text-xs text-gray-500 dark:text-text-muted truncate">
+              {userEmail}
             </p>
           </div>
         </div>

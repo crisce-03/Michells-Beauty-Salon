@@ -21,6 +21,9 @@ interface Appointment {
 
 import CitasTable from "@/features/citas/components/CitasTable";
 import { useCitas } from "@/features/citas/hooks/useCitas";
+import DeleteCitaDialog from "@/features/citas/components/DeleteCitaDialog";
+
+
 
 // --- DATOS DE EJEMPLO ---
 
@@ -41,7 +44,6 @@ export default function CitasPage() {
     editFormData,
     setEditFormData,
     isEditSubmitting,
-    openEditDialog,
     handleUpdate,
     handleEditChange,
 
@@ -49,6 +51,9 @@ export default function CitasPage() {
     deleteOpen,
     setDeleteOpen,
     deleteId,
+    deleteNombre,
+    handleDelete,
+    openDeleteDialog,
 
     filtroEstado,
     setFiltroEstado,
@@ -66,7 +71,9 @@ export default function CitasPage() {
     irPagina,
     irPaginaSiguiente,
     irPaginaAnterior,
-    itemsPorPagina: ITEMS_POR_PAGINA, } = useCitas();
+    itemsPorPagina: ITEMS_POR_PAGINA,
+    cambiarEstado,
+  } = useCitas();
   return (
     <div className="mx-auto max-w-7xl space-y-8">
       
@@ -101,8 +108,19 @@ export default function CitasPage() {
         irPaginaAnterior={irPaginaAnterior}
         totalItems={citasFiltrados.length}
         itemsPorPagina={ITEMS_POR_PAGINA}
-        onEdit={openEditDialog}
+        onDelete={handleDelete}
+        openDeleteDialog={openDeleteDialog}
         citas={citasActuales} 
+        onCambiarEstado={cambiarEstado}
+      />
+
+      {/* Eliminar Cita Dialog */}
+      <DeleteCitaDialog
+        deleteOpen={deleteOpen}
+        setDeleteOpen={setDeleteOpen}
+        deleteId={deleteId}
+        deleteNombre={deleteNombre}
+        handleDelete={handleDelete}
       />
       
     </div>

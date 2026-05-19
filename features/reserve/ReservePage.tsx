@@ -5,7 +5,6 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/features/landing/components/Hero";
 import MyWork from "@/features/landing/components/MyWork";
 import Services from "@/features/landing/components/Services";
-import BannerReserve from "@/features/landing/components/BannerReserve";
 import Contacto from "@/features/landing/components/Contacto";
 import AboutMe from "@/features/landing/components/AboutMe";
 import Footer from "@/components/layout/Footer";
@@ -46,6 +45,7 @@ export default function Reserve() {
     handlePersonalDataChange,
     handleSaveCita,
     cargarCitaParaEditar,
+    horariosBD,
   } = useReserva();
 
   const [step, setStep] = useState(1);
@@ -104,7 +104,7 @@ export default function Reserve() {
         return <DateStep 
           onNext={() => handleStepChange(3)} 
           onBack={() => handleStepChange(1)} 
-          horarios={horarios}
+          horariosBD={horariosBD}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           selectedTime={selectedTime}

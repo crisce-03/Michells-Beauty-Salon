@@ -1,24 +1,31 @@
-import { useEffect, useState, useCallback } from "react";
+"use client";
+
+import { useEffect, useState, useCallback, useRef } from "react";
 import { startOfWeek, addWeeks, format, addDays } from "date-fns";
 import { toast } from "sonner";
-import { WorkingDay } from "@/features/horarios/types/horarios.types";
-import { SemanaDireccion } from "@/features/horarios/types/horarios.types";
+import {
+  WorkingDay,
+  SemanaDireccion,
+} from "@/features/horarios/types/horarios.types";
 import { getHorarios, createHorarios } from "../services/horariosService";
 
 export function useHorarios() {
-  // ================= STATE =================
   const [semanaActual, setSemanaActual] = useState(
     startOfWeek(new Date(), { weekStartsOn: 1 }),
   );
-
   const [horariosBD, setHorariosBD] = useState<any[]>([]);
   const [horarios, setHorarios] = useState<WorkingDay[]>([]);
+  
+  // SOLUCIÓN: Usar useRef en lugar de useState para rastrear la semana anterior
+  const semanaAnteriorRef = useRef<Date | null>(null);
 
   // ================= WEEK NAVIGATION =================
   const cambiarSemana = (dir: SemanaDireccion) => {
-    setSemanaActual((prev) =>
-      dir === "siguiente" ? addWeeks(prev, 1) : addWeeks(prev, -1),
-    );
+    setSemanaActual((prev) => {
+      const nueva = dir === "siguiente" ? addWeeks(prev, 1) : addWeeks(prev, -1);
+      return nueva;
+    });
+    fetchHorarios(); 
   };
 
   // ================= FETCH =================
@@ -27,11 +34,63 @@ export function useHorarios() {
       const data = await getHorarios();
       setHorariosBD(data);
     } catch (err: any) {
-      toast.error("Error al cargar horarios", {
-        description: err.message,
-      });
+      toast.error("Error al cargar horarios", { description: err.message });
     }
   }, []);
+
+  // ================= INIT =================
+  useEffect(() => {
+    fetchHorarios();
+  }, [fetchHorarios]);
+
+  // ================= TRANSFORM BD → UI =================
+  useEffect(() => {
+    const semanaBase: WorkingDay[] = [
+      { id: "mon", name: "Lunes",     isActive: false, timeSlots: [] },
+      { id: "tue", name: "Martes",    isActive: false, timeSlots: [] },
+      { id: "wed", name: "Miércoles", isActive: false, timeSlots: [] },
+      { id: "thu", name: "Jueves",    isActive: false, timeSlots: [] },
+      { id: "fri", name: "Viernes",   isActive: false, timeSlots: [] },
+      { id: "sat", name: "Sábado",    isActive: false, timeSlots: [] },
+      { id: "sun", name: "Domingo",   isActive: false, timeSlots: [] },
+    ];
+
+    // Evaluamos el cambio de forma síncrona
+    const semanaCambio = semanaAnteriorRef.current?.getTime() !== semanaActual.getTime();
+    if (semanaCambio) {
+      semanaAnteriorRef.current = semanaActual; // Actualizamos la ref instantáneamente
+    }
+
+    setHorarios((prevHorarios) =>
+      semanaBase.map((dia, index) => {
+        const fecha = addDays(semanaActual, index);
+        const fechaStr = format(fecha, "yyyy-MM-dd");
+        const turnos = horariosBD.filter((r) => r.fecha_hora.startsWith(fechaStr));
+
+        const tieneMarcador = turnos.some((r) => r.estado === "Marcador");
+        const horas = turnos
+          .filter((r) => r.estado !== "Marcador")
+          .map((r) => r.fecha_hora.substring(11, 16))
+          .sort();
+
+        // Ahora semanaCambio es 100% confiable
+        const prevDia = semanaCambio ? null : prevHorarios.find((p) => p.id === dia.id);
+
+        const isActive =
+          turnos.length > 0
+            ? tieneMarcador || horas.length > 0
+            : prevDia
+              ? prevDia.isActive
+              : dia.isActive;
+
+        return {
+          ...dia,
+          isActive,
+          timeSlots: horas.length > 0 ? horas : (prevDia?.timeSlots ?? []),
+        };
+      })
+    );
+  }, [horariosBD, semanaActual]);
 
   // ================= SAVE =================
   const guardarCambios = async () => {
@@ -39,14 +98,22 @@ export function useHorarios() {
       const payload: any[] = [];
 
       horarios.forEach((dia, index) => {
-        if (!dia.isActive) return;
-
         const fecha = addDays(semanaActual, index);
         const fechaStr = format(fecha, "yyyy-MM-dd");
 
+        if (!dia.isActive) return;
+
+        if (dia.timeSlots.length === 0) {
+          payload.push({
+            fecha_hora: `${fechaStr} 00:00:00`,
+            estado: "Marcador",
+          });
+          return;
+        }
+
         dia.timeSlots.forEach((hora) => {
           payload.push({
-            fecha_hora: `${fechaStr} ${hora}`,
+            fecha_hora: `${fechaStr} ${hora}:00`,
             estado: "Activo",
           });
         });
@@ -54,13 +121,7 @@ export function useHorarios() {
 
       const inicioSemana = format(semanaActual, "yyyy-MM-dd");
       const finSemana = format(addDays(semanaActual, 6), "yyyy-MM-dd");
-
-      const data = await createHorarios({
-        inicioSemana,
-        finSemana,
-        horarios: payload,
-      });
-
+      await createHorarios({ inicioSemana, finSemana, horarios: payload });
       toast.success("Horarios guardados correctamente");
       fetchHorarios();
     } catch (err: any) {
@@ -70,16 +131,13 @@ export function useHorarios() {
 
   // ================= LOCAL ACTIONS =================
   const agregarTurnoLocal = (diaIndex: number) => {
-    setHorarios((prev) => {
-      return prev.map((dia, i) => {
-        if (i !== diaIndex) return dia;
-
-        return {
-          ...dia,
-          timeSlots: [...dia.timeSlots, "08:00"],
-        };
-      });
-    });
+    setHorarios((prev) =>
+      prev.map((dia, i) =>
+        i !== diaIndex
+          ? dia
+          : { ...dia, timeSlots: [...dia.timeSlots, "08:00"] },
+      ),
+    );
   };
 
   const eliminarTurnoLocal = (diaIndex: number, horaIndex: number) => {
@@ -101,57 +159,34 @@ export function useHorarios() {
     value: string,
   ) => {
     setHorarios((prev) => {
-      const copy = [...prev];
+      const copy = prev.map((dia) => ({
+        ...dia,
+        timeSlots: [...dia.timeSlots],
+      }));
       copy[diaIndex].timeSlots[horaIndex] = value;
       return copy;
     });
   };
 
-  // ================= TRANSFORM BD → UI =================
-  useEffect(() => {
-    const semanaBase: WorkingDay[] = [
-      { id: "mon", name: "Lunes", isActive: true, timeSlots: [] },
-      { id: "tue", name: "Martes", isActive: true, timeSlots: [] },
-      { id: "wed", name: "Miércoles", isActive: true, timeSlots: [] },
-      { id: "thu", name: "Jueves", isActive: true, timeSlots: [] },
-      { id: "fri", name: "Viernes", isActive: true, timeSlots: [] },
-      { id: "sat", name: "Sábado", isActive: true, timeSlots: [] },
-      { id: "sun", name: "Domingo", isActive: false, timeSlots: [] },
-    ];
-
-    const semanaLlena = semanaBase.map((dia, index) => {
-      const fecha = addDays(semanaActual, index);
-      const fechaStr = format(fecha, "yyyy-MM-dd");
-
-      const turnos = horariosBD.filter((r) =>
-        r.fecha_hora.startsWith(fechaStr),
-      );
-
-      const horas = turnos.map((r) => r.fecha_hora.substring(11, 16)).sort();
-
-      return {
-        ...dia,
-        timeSlots: horas,
-      };
-    });
-
-    setHorarios(semanaLlena);
-  }, [horariosBD, semanaActual]);
-
-  // ================= INIT =================
-  useEffect(() => {
-    fetchHorarios();
-  }, [fetchHorarios]);
+  const toggleDiaLocal = (diaIndex: number) => {
+    setHorarios((prev) =>
+      prev.map((dia, i) =>
+        i !== diaIndex ? dia : { ...dia, isActive: !dia.isActive },
+      ),
+    );
+  };
 
   // ================= RETURN =================
   return {
     semanaActual,
     horarios,
+    horariosBD,
     cambiarSemana,
     fetchHorarios,
     guardarCambios,
     agregarTurnoLocal,
     eliminarTurnoLocal,
     cambiarHoraLocal,
+    toggleDiaLocal,
   };
 }

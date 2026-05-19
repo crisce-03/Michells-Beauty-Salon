@@ -4,10 +4,11 @@ type Props = {
   guardarCambios: () => void;
   onVerHistorial?: () => void;
   loading?: boolean;
+  descargarImagen?: () => void;
 }
 
 
-export default function HorariosHeader({guardarCambios, onVerHistorial, loading}: Props) {
+export default function HorariosHeader({guardarCambios, onVerHistorial, loading, descargarImagen}: Props) {
   return (
     <div className="space-y-4">
             <nav className="flex text-sm text-gray-500 dark:text-text-muted">
@@ -32,6 +33,8 @@ export default function HorariosHeader({guardarCambios, onVerHistorial, loading}
                 </p>
               </div>
               <div className="flex gap-3">
+
+                 <div className="flex gap-3">
                 <button 
                 onClick={guardarCambios}
                 disabled={loading}
@@ -42,6 +45,20 @@ export default function HorariosHeader({guardarCambios, onVerHistorial, loading}
                   Guardar Cambios
                 </button>
               </div>
+              {/* Botón descargar */}
+                    <div className="flex justify-end">
+                      <button
+                        onClick={descargarImagen}
+                        className="flex items-center gap-2 rounded-lg border border-border-dark bg-surface-dark px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">
+                          download
+                        </span>
+                        Descargar horarios
+                      </button>
+                    </div>
+              </div>
+             
             </div>
         
         </div>

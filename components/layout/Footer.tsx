@@ -27,11 +27,14 @@ export default function Footer() {
 
           {/* Botón + Redes */}
           <div className="flex flex-col items-center gap-6">
+            <a href="https://wa.me/50369303080" target="_blank" rel="noopener noreferrer">
             <button
               className=" button-shadow bg-black border border-primary text-primary font-bold px-8 py-4 rounded-lg transition-all shadow-glow hover:bg-[#d6a644] hover:text-black">
-              RESERVAR CITA
+                
+                  RESERVAR CITA
+                
             </button>
-
+            </a>
            <div className="flex items-center gap-6">
     
     <a

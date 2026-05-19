@@ -11,26 +11,33 @@ import {
   endOfWeek,
   isSameMonth,
   isSameDay,
-  addDays,
   eachDayOfInterval,
   isBefore,
   startOfToday,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { WorkingDay } from "../../horarios/types/horarios.types";
 
 interface DateStepProps {
   onNext: () => void;
   onBack: () => void;
 
-  horarios: WorkingDay[];
+  // 1. CAMBIO: Recibir horariosBD en lugar de horarios
+  horariosBD: any[]; 
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
   selectedTime: string | null;
   setSelectedTime: (time: string | null) => void;
 }
 
-export default function DateStep({ onNext, onBack, horarios, selectedDate, setSelectedDate, selectedTime, setSelectedTime }: DateStepProps) {
+export default function DateStep({
+  onNext,
+  onBack,
+  horariosBD, // <-- 2. Usar horariosBD
+  selectedDate,
+  setSelectedDate,
+  selectedTime,
+  setSelectedTime,
+}: DateStepProps) {
   const [currentMonth, setCurrentMonth] = React.useState(new Date());
 
   // Lógica de generación de calendario
@@ -42,22 +49,32 @@ export default function DateStep({ onNext, onBack, horarios, selectedDate, setSe
   const calendarDays = eachDayOfInterval({
     start: startDate,
     end: endDate,
-
-    
   });
 
-  const selectedDayId = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][
-    selectedDate.getDay()
-  ];
-  const selectedWorkingDay = horarios.find((day) => day.id === selectedDayId);
-  const TIME_SLOTS = (selectedWorkingDay?.timeSlots ?? []).map((time) => {
-  const hour = parseInt(time.split(':')[0]);
-  return {
-    time,
-    available: true,
-    period: hour < 12 ? 'Mañana' : 'Tarde',
-  };
-});
+  const fechaStr = format(selectedDate, "yyyy-MM-dd");
+
+  // 1. Obtenemos TODOS los turnos del día (ignorando solo el Marcador)
+  // y los ordenamos cronológicamente.
+  const turnosDelDia = horariosBD
+    .filter((r) => r.fecha_hora.startsWith(fechaStr) && r.estado !== "Marcador")
+    .sort((a, b) => a.fecha_hora.localeCompare(b.fecha_hora));
+
+  // 2. Mapeamos evaluando el estado real (Activo vs Ocupado)
+  const TIME_SLOTS = [...new Map(
+    turnosDelDia.map((turno) => {
+      const time = turno.fecha_hora.substring(11, 16);
+      const hour = parseInt(time.split(":")[0]);
+      
+      return [time, {
+        time,
+        // 👇 AQUÍ ESTÁ LA MAGIA: Solo es 'available' si el estado es exactamente "Activo"
+        available: turno.estado === "Activo", 
+        period: hour < 12 ? "Mañana" : "Tarde",
+      }];
+    })
+  ).values()];
+  // =================================================
+  // =================================================
 
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
@@ -117,7 +134,7 @@ export default function DateStep({ onNext, onBack, horarios, selectedDate, setSe
                     className={`aspect-square flex items-center justify-center rounded-full text-sm transition-all
                       ${!isCurrentMonth ? "text-gray-800 cursor-default" : ""}
                       ${isPast && isCurrentMonth ? "text-gray-700 cursor-not-allowed" : "text-gray-300 hover:bg-white/5 hover:text-primary"}
-                      ${isSelected ? " text-black font-bold shadow-[0_0_15px_rgba(262,195,23,0.5)] scale-105" : ""}
+                      ${isSelected ? " text-black font-bold shadow-[0_0_15px_rgba(262,195,23,0.5)] scale-105 " : ""}
                     `}
                   >
                     {format(day, "d")}
@@ -153,20 +170,22 @@ export default function DateStep({ onNext, onBack, horarios, selectedDate, setSe
                   <span className="h-px flex-1 bg-white/10"></span>
                 </div>
                 {TIME_SLOTS.filter((s) => s.period === "Mañana").map(
-                  ({ time, available }) => (
+                  (
+                    { time, available },
+                    index, 
+                  ) => (
                     <button
-                      key={time}
+                      key={`manana-${time}-${index}`} 
                       disabled={!available}
                       onClick={() => setSelectedTime(time)}
                       className={`relative flex items-center justify-center py-3 px-2 rounded border transition-all
-                      ${
-                        !available
-                          ? "bg-white/5 border-transparent text-gray-700 cursor-not-allowed"
-                          : selectedTime === time
-                            ? "border-primary bg-primary/10 text-primary font-bold"
-                            : "border-white/10 bg-black text-gray-300 hover:border-primary/50 hover:bg-primary/5"
-                      }
-                    `}
+        ${
+          !available
+            ? "bg-white/5 border-transparent text-gray-700 cursor-not-allowed"
+            : selectedTime === time
+              ? "border-primary bg-primary/10 text-primary font-bold"
+              : "border-white/10 bg-black text-gray-300 hover:border-primary/50 hover:bg-primary/5"
+        }`}
                     >
                       <span
                         className={
@@ -194,20 +213,22 @@ export default function DateStep({ onNext, onBack, horarios, selectedDate, setSe
                   <span className="h-px flex-1 bg-white/10"></span>
                 </div>
                 {TIME_SLOTS.filter((s) => s.period === "Tarde").map(
-                  ({ time, available }) => (
+                  (
+                    { time, available },
+                    index, 
+                  ) => (
                     <button
-                      key={time}
+                      key={`tarde-${time}-${index}`} 
                       disabled={!available}
                       onClick={() => setSelectedTime(time)}
                       className={`relative flex items-center justify-center py-3 px-2 rounded border transition-all
-                      ${
-                        !available
-                          ? "bg-white/5 border-transparent text-gray-700 cursor-not-allowed"
-                          : selectedTime === time
-                            ? "border-primary bg-primary/10 text-primary font-bold"
-                            : "border-white/10 bg-black text-gray-300 hover:border-primary/50 hover:bg-primary/5"
-                      }
-                    `}
+        ${
+          !available
+            ? "bg-white/5 border-transparent text-gray-700 cursor-not-allowed"
+            : selectedTime === time
+              ? "border-primary bg-primary/10 text-primary font-bold"
+              : "border-white/10 bg-black text-gray-300 hover:border-primary/50 hover:bg-primary/5"
+        }`}
                     >
                       <span
                         className={
