@@ -93,7 +93,7 @@ export default function ServiciosPage() {
         setPaginaActual={setPaginaActual}
       />
 
-      <ServiciosTable
+        <ServiciosTable
         services={serviciosActuales}
         onEdit={openEditDialog}
         onDelete={openDeleteDialog}

@@ -58,13 +58,11 @@ export default function CitasPage() {
     filtroEstado,
     setFiltroEstado,
     citasFiltrados,
-    /*
-    totalCitas: citas.length,
-    activos: citas.filter((c) => c.estado === "Activo").length,
-    inactivos: citas.filter((c) => c.estado === "Inactivo").length,
-    */
     citasActuales,
+    filtroBusqueda,
+    setFiltroBusqueda,
 
+    // pagination
     paginaActual,
     setPaginaActual,
     totalPaginas,
@@ -112,6 +110,10 @@ export default function CitasPage() {
         openDeleteDialog={openDeleteDialog}
         citas={citasActuales} 
         onCambiarEstado={cambiarEstado}
+        filtroEstado={filtroEstado}
+        setFiltroEstado={setFiltroEstado}
+        filtroBusqueda={filtroBusqueda}
+        setFiltroBusqueda={setFiltroBusqueda}
       />
 
       {/* Eliminar Cita Dialog */}

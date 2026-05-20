@@ -10,16 +10,6 @@ type Props = {
 export default function ServiciosFilters({ filtroCategoria, setFiltroCategoria, filtroEstado, setFiltroEstado, setPaginaActual }: Props) {
   return (
          <div className="flex flex-col gap-4 border-b border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-border-dark">
-          <div className="relative max-w-sm flex-1">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-text-muted text-[20px]">
-              search
-            </span>
-            <input
-              className="w-full rounded-lg border border-gray-200 py-2 pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-surface-input dark:border-border-dark dark:text-cream-label dark:placeholder-text-muted/70"
-              placeholder="Buscar servicio por nombre..."
-              type="text"
-            />
-          </div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
               <select

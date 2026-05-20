@@ -64,6 +64,7 @@ export function useCitas() {
 
   // ================= FILTERS =================
   const [filtroEstado, setFiltroEstado] = useState("Todos");
+  const [filtroBusqueda, setFiltroBusqueda] = useState("");
 
   // ================= PAGINATION =================
   const [paginaActual, setPaginaActual] = useState(1);
@@ -209,14 +210,20 @@ export function useCitas() {
   };
 
   // ================= FILTERS =================
-  const citasFiltrados = useMemo(
-    () =>
-      citas.filter((c) => {
-        const est = filtroEstado === "Todos";
-        return est;
-      }),
-    [citas, filtroEstado],
-  );
+const citasFiltrados = useMemo(
+  () =>
+    citas.filter((c) => {
+      const cumpleEstado =
+        filtroEstado === "Todos" ? true : c.estado === filtroEstado;
+
+      const cumpleBusqueda = c.personalData.nombre
+        .toLowerCase()
+        .includes(filtroBusqueda.toLowerCase());
+
+      return cumpleEstado && cumpleBusqueda;
+    }),
+  [citas, filtroEstado, filtroBusqueda],
+);
 
   
 
@@ -288,14 +295,9 @@ export function useCitas() {
     // filters
     filtroEstado,
     setFiltroEstado,
+    filtroBusqueda,
+    setFiltroBusqueda,
     citasFiltrados,
-
-    // stats
-    /*
-    totalCitas: citas.length,
-    activos: citas.filter((c) => c.estado === "Activo").length,
-    inactivos: citas.filter((c) => c.estado === "Inactivo").length,
-    */
 
     // table
     citasActuales,
