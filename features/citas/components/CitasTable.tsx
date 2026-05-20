@@ -16,6 +16,10 @@ type Props = {
   onDelete: (cita: Cita) => void;
   openDeleteDialog: (id: number, nombre: string) => void;
   onCambiarEstado: (cita: Cita, nuevoEstado: string) => void;
+  filtroEstado: string;
+  setFiltroEstado: (nuevoFiltroEstado: string) => void;
+  filtroBusqueda: string;
+  setFiltroBusqueda: (nuevoFiltroBusqueda: string) => void;
 };
 
 const ESTADOS = [
@@ -56,6 +60,10 @@ export default function CitasTable({
   onDelete,
   openDeleteDialog,
   onCambiarEstado,
+  filtroEstado,
+  setFiltroEstado,
+  filtroBusqueda,
+  setFiltroBusqueda,
 }: Props) {
   const router = useRouter();
   const [dropdownAbierto, setDropdownAbierto] = useState<number | null>(null);
@@ -86,6 +94,8 @@ export default function CitasTable({
               search
             </span>
             <input
+              value={filtroBusqueda}
+              onChange={(e) => setFiltroBusqueda(e.target.value)}
               className="w-full rounded-lg border border-gray-200 py-2 pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-surface-input dark:border-border-dark dark:text-cream-label dark:placeholder-text-muted/70"
               placeholder="Buscar cliente..."
               type="text"
@@ -93,12 +103,14 @@ export default function CitasTable({
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
-              <select className="appearance-none cursor-pointer rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-8 text-sm font-medium text-gray-700 outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-surface-input dark:border-border-dark dark:text-cream-label">
-                <option>Estado: Todos</option>
-                <option>Confirmado</option>
-                <option>Pendiente</option>
-                <option>Completado</option>
-                <option>Cancelado</option>
+              <select 
+              onChange={(e) => setFiltroEstado(e.target.value)}
+              className="appearance-none cursor-pointer rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-8 text-sm font-medium text-gray-700 outline-none focus:border-primary focus:ring-1 focus:ring-primary dark:bg-surface-input dark:border-border-dark dark:text-cream-label">
+                <option value="Todos">Estado: Todos</option>
+                <option value="CONFIRMADA">Confirmada</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="COMPLETADA">Completada</option>
+                <option value="CANCELADA">Cancelada</option>
               </select>
               <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-primary text-[20px]">
                 expand_more

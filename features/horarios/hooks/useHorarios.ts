@@ -130,15 +130,33 @@ export function useHorarios() {
   };
 
   // ================= LOCAL ACTIONS =================
-  const agregarTurnoLocal = (diaIndex: number) => {
-    setHorarios((prev) =>
-      prev.map((dia, i) =>
-        i !== diaIndex
-          ? dia
-          : { ...dia, timeSlots: [...dia.timeSlots, "08:00"] },
-      ),
-    );
-  };
+ const agregarTurnoLocal = (diaIndex: number) => {
+  setHorarios((prev) =>
+    prev.map((dia, i) => {
+      if (i !== diaIndex) return dia;
+
+      // Encontrar la primera hora libre que no esté ya en timeSlots
+      const horasExistentes = new Set(dia.timeSlots);
+      let horaLibre = "08:00";
+
+      for (let h = 8; h <= 22; h++) {
+        const candidato = `${String(h).padStart(2, "0")}:00`;
+        if (!horasExistentes.has(candidato)) {
+          horaLibre = candidato;
+          break;
+        }
+        // También intentar medias horas
+        const candidatoMedia = `${String(h).padStart(2, "0")}:30`;
+        if (!horasExistentes.has(candidatoMedia)) {
+          horaLibre = candidatoMedia;
+          break;
+        }
+      }
+
+      return { ...dia, timeSlots: [...dia.timeSlots, horaLibre] };
+    }),
+  );
+};
 
   const eliminarTurnoLocal = (diaIndex: number, horaIndex: number) => {
     setHorarios((prev) =>
