@@ -13,26 +13,25 @@ export default function ServiceCard({
   totalPrice: number;
   setTotalPrice: (price: number) => void;
 }) {
-
   const isSelected = selectedServices.some((s) => s.id === service.id);
   return (
     <div className="group relative flex flex-col gap-4 rounded-xl border border-[#333] bg-[#1a1a1a] p-4 hover:border-primary transition-all shadow-none hover:shadow-[0_0_15px_rgba(242,185,13,0.15)] overflow-hidden cursor-pointer">
       <div className="absolute top-4 right-4 z-10">
         {!isSelected && (
-          <div className="rounded-full bg-black/40 backdrop-blur-md p-1.5 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-          <span
-            onClick={() => {
-              setSelectedServices([...selectedServices, service]);
-              setTotalPrice(totalPrice + Number(service.precio));
-            }}
-            className="material-symbols-outlined text-lg bg-primary text-white p-1.5 rounded-full"
-          >
-            add
-          </span>
-        </div>
-        )}{
-          isSelected && (
-            <div className="rounded-full bg-black/40 backdrop-blur-md p-1.5 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="rounded-full bg-black/40 backdrop-blur-md p-1.5 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+            <span
+              onClick={() => {
+                setSelectedServices([...selectedServices, service]);
+                setTotalPrice(totalPrice + Number(service.precio));
+              }}
+              className="material-symbols-outlined text-lg bg-primary text-white p-1.5 rounded-full"
+            >
+              add
+            </span>
+          </div>
+        )}
+        {isSelected && (
+          <div className="rounded-full bg-black/40 backdrop-blur-md p-1.5 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
             <span
               onClick={() => {
                 setSelectedServices(
@@ -45,8 +44,7 @@ export default function ServiceCard({
               done
             </span>
           </div>
-          )
-        }
+        )}
       </div>
       <div className="overflow-hidden rounded-lg w-full h-60 shrink-0">
         {service.image_url ? (
