@@ -37,7 +37,7 @@ export default function HorariosPage() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl space-y-8">
+    <div className="mx-auto max-w-7xl space-y-8 pt-16 md:pt-8 xl:pt-0">
       <HorariosHeader
         guardarCambios={guardarCambios}
         descargarImagen={descargarImagen}

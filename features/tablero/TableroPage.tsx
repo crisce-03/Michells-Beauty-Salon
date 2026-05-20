@@ -20,9 +20,9 @@ export default function TableroPage() {
     backgroundSize: "40px 40px",
   };
   return (
-    <div className="mx-auto max-w-7xl space-y-8">
+    <div className="mx-auto max-w-7xl space-y-8 pt-16 md:pt-8 xl:pt-0">
       {/* Encabezado e Info */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-cream-label">
             Tablero Principal
