@@ -6,7 +6,7 @@ export default function SobreMi() {
   return (
 
     
-    <section className="bg-black text-white py-20 px-6">
+    <section className="bg-black text-white py-20 px-6" id="sobre-mi">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
         {/* Imagen */}
