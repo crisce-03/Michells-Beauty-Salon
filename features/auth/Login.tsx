@@ -102,15 +102,6 @@ export default function LoginForm() {
               ) : "Iniciar Sesión"}
             </button>
           </form>
-
-          <div className="mt-8 pt-6 border-t border-border-dark text-center">
-            <p className="text-xs text-text-muted leading-relaxed">
-              ¿Olvidaste tus credenciales? <br />
-              <span className="text-primary hover:text-primary-light transition-colors cursor-pointer mt-1 inline-block font-medium">
-                Contactar a Soporte Técnico
-              </span>
-            </p>
-          </div>
         </div>
       </div>
     </div>
