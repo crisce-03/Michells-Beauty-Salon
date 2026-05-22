@@ -1,6 +1,28 @@
 "use client"
 
+import { useState, useEffect } from "react";
+import Carousel from "@/features/landing/components/atomos/Carousel";
+
 import Link from "next/link";
+
+const unas = [
+    "unas1.jpg",
+    "unas2.jpg",
+    "unas3.jpg",
+    "unas4.jpeg",
+    "unas5.jpeg",
+    "unas6.jpeg",
+    "unas7.jpeg",
+    "unas8.jpeg",
+    "unas9.jpeg",
+    "unas10.jpeg",
+    "unas11.jpeg",
+    "unas12.jpeg",
+    "unas13.jpeg",
+]
+
+
+
 
 export default function MyWork(){
     return(
@@ -23,9 +45,7 @@ export default function MyWork(){
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="group relative overflow-hidden rounded-xl h-[500px]">
         <div className="imgBox">
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="pestañas1.jpg"/>
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="pestañas2.jpg"/>
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="pestañas3.jpg"/>
+                <Carousel images={["pestañas1.jpg", "pestañas2.jpg", "pestañas3.jpg"]} title="Pestañas Pelo a Pelo" />
             </div>
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/90 to-transparent flex items-end p-8 opacity-0 group-hover:opacity-100 transition-opacity">
         <div>
@@ -35,20 +55,15 @@ export default function MyWork(){
         </div>
         <div className="group relative overflow-hidden rounded-xl h-[500px]">
             <div className="imgBox">
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="unas1.jpg"/>
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="unas2.jpg"/>
-                <img alt="Professional makeup" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Professional makeup artistry close up" src="unas3.jpg"/>
+                <Carousel images={unas} title="Uñas Acrilicas" />
             </div>
-        
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/90 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity">
         <h4 className="text-lg font-bold text-white">Uñas Acrilicas</h4>
         </div>
         </div>
         <div className="group relative overflow-hidden rounded-xl h-[500px]">
         <div className="imgBox">
-            <img alt="Nail art design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Elegant gel nail art design" src="pies1.jpg"/>
-            <img alt="Nail art design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Elegant gel nail art design" src="pies2.jpg"/>
-            <img alt="Nail art design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Elegant gel nail art design" src="pies3.jpg"/>
+            <Carousel images={["pies1.jpg", "pies2.jpg", "pies3.jpg"]} title="Acripie" />
         </div>
         
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/90 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -57,9 +72,7 @@ export default function MyWork(){
         </div>
         <div className="group relative overflow-hidden rounded-xl h-[500px]">
         <div className="imgBox">
-            <img alt="Nail art design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Elegant gel nail art design" src="cejas1.jpg"/>
-            <img alt="Nail art design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Elegant gel nail art design" src="cejas2.jpg"/>
-            <img alt="Nail art design" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 carousel-image" data-alt="Elegant gel nail art design" src="cejas3.jpg"/>
+            <Carousel images={["cejas1.jpg", "cejas2.jpg", "cejas3.jpg"]} title="Cejas Laminadas" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/90 to-transparent flex items-end p-8 opacity-0 group-hover:opacity-100 transition-opacity">
         <div>

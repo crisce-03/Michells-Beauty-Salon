@@ -100,12 +100,19 @@ export default function Footer() {
 
         {/* Parte inferior */}
         <div
-          className="mt-16 pt-8 border-t text-center text-xs tracking-widest uppercase"
+          className="mt-16 pt-8 border-t text-center text-xs tracking-widest uppercase flex flex-col items-center gap-3"
           style={{ borderColor: "#333333", color: "#FAF3E0" }}
         >
-          © 2026 Michell's Beauty. Santa Ana, El Salvador. Todos los derechos reservados.
-          <br className="md:hidden" />
-          <span style={{ color: "#d6a644" }}> CRG Solutions</span>
+          <p>
+            © 2026 Michell's Beauty. Santa Ana, El Salvador. Todos los derechos reservados.
+          </p>
+          
+          <a 
+            href="https://github.com/crisce-03" target="_blank" rel="noopener noreferrer"
+            className="normal-case tracking-normal text-[10px] opacity-40 hover:opacity-100 transition-opacity duration-300 hover:text-[#d6a644]"
+          >
+            Diseñado y desarrollado por Cristopher Cerritos
+          </a>
         </div>
       </div>
     </footer>

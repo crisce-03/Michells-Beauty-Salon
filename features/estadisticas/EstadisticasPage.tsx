@@ -53,20 +53,6 @@ export default function EstadisticasPage() {
             Ana.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <select className="bg-surface-input border border-border-dark text-cream-label text-sm rounded-lg px-4 py-2 outline-none cursor-pointer focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
-            <option>Últimos 30 días</option>
-            <option>Este mes</option>
-            <option>Mes anterior</option>
-            <option>Este año</option>
-          </select>
-          <button className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-luxury-black hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-            <span className="material-symbols-outlined text-[20px]">
-              download
-            </span>
-            Reporte PDF
-          </button>
-        </div>
       </div>
 
       {/* Tarjetas KPI (Key Performance Indicators) */}
