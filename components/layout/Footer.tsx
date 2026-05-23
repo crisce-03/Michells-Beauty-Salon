@@ -59,19 +59,7 @@ export default function Footer() {
                 />
               </a>
 
-              <a
-                href="https://wa.me/50369303080"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group transition-transform duration-300 hover:scale-110"
-                aria-label="Tiktok Michells Beauty Salon"
-              >
-                <img
-                  className="w-8 h-8 opacity-80 group-hover:opacity-100 transition-opacity"
-                  src="tiktokLogo.png"
-                  alt="TiktoK"
-                />
-              </a>
+          
             </div>
           </div>
 

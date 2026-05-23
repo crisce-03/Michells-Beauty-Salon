@@ -19,7 +19,7 @@ export default function Contacto(){
         </div>
         <div>
         <h4 className="text-white font-bold mb-1">Dirección</h4>
-        <p className="text-white/50 text-sm">9a av nte NO 47, frente a iglesia Santa Barbara, Santa Ana, Santa Ana</p>
+        <p className="text-white/50 text-sm">Barrio San Juan POL1 Lote No3, Santa Ana, Santa Ana</p>
         </div>
         </div>
         <div className="flex items-start space-x-4">
@@ -70,20 +70,6 @@ export default function Contacto(){
       />
     </a>
 
-     <a
-      href="https://wa.me/50369303080"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group transition-transform duration-300 hover:scale-110"
-      aria-label="Tiktok Michells Beauty Salon"
-    >
-      <img
-        className="w-8 h-8 opacity-80 group-hover:opacity-100 transition-opacity"
-        src="tiktokLogo.png"
-        alt="TiktoK"
-      />
-    </a>
-
   </div>
 </div>
         </div>
@@ -91,7 +77,7 @@ export default function Contacto(){
         </div>
         <div className="relative h-[450px] rounded-2xl overflow-hidden grayscale contrast-125 border border-primary/20">
        <iframe
-        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3871.3308046897137!2d-89.55518602490523!3d13.998388886419729!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTPCsDU5JzU0LjIiTiA4OcKwMzMnMDkuNCJX!5e0!3m2!1ses-419!2ssv!4v1725576428456!5m2!1ses-419!2ssv"
+         src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3871.362620056265!2d-89.55954712490525!3d13.996499986421414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTPCsDU5JzQ3LjQiTiA4OcKwMzMnMjUuMSJX!5e0!3m2!1ses!2ssv!4v1779553148184!5m2!1ses!2ssv"
         width="100%"
         height="450"
         style={{ border: 0 }}
