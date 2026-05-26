@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Epilogue, Sofia } from "next/font/google";
 import "./globals.css";
 import "./head.css";
@@ -19,6 +19,11 @@ const sofia = Sofia({
 export const metadata: Metadata = {
   title: "Michells Beauty Salon",
   description: "Servicios de belleza profesional",
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -28,13 +33,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-        <head>
-             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-        </head>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      </head>
       <body className={`${epilogue.variable} ${sofia.variable} antialiased`}>
         {children}
-        <Toaster theme="dark" richColors  position="bottom-right" />
+        <Toaster theme="dark" richColors position="bottom-right" />
       </body>
     </html>
   );
