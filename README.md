@@ -6,6 +6,7 @@
   <a href="https://michells-beauty-salon.vercel.app/" target="_blank" style="margin-bottom: 20px;"><b>🌐 Visitar la página web</b></a>
 </div>
 
+
 ![Estado del Proyecto](https://img.shields.io/badge/Estado-Producción_Fase_1-success)
 ![Next.js](https://img.shields.io/badge/Next.js-14+-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?logo=typescript)
