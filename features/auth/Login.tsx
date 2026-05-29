@@ -51,7 +51,7 @@ export default function LoginForm() {
         {/* Encabezado y Logo */}
         <div className="img_conteiner">
           <img className="logo" src="/logo_original.jpg" alt="Logo Michell's Beauty" />
-          <h1 className="font-signature text-2xl text-primary glow-text tracking-wider mt-5">
+          <h1 className="font-signature text-2xl text-primary text-center glow-text tracking-wider mt-5">
             Michell's Beauty
           </h1>
           <p className="mt-4 text-text-muted text-sm uppercase tracking-widest text-center">
