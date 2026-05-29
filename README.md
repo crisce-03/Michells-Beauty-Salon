@@ -3,7 +3,7 @@
 <div align="center">
   <img src="./public/favicon-copia.png" alt="Logo Michell's Beauty Salon" width="250"/>
   <br><br>
-  <a href="https://michells-beauty-salon.vercel.app/" target="_blank"><b>🌐 Visitar la página web en vivo</b></a>
+  <a href="https://michells-beauty-salon.vercel.app/" target="_blank" style="margin: 20px;"><b>🌐 Visitar la página web</b></a>
 </div>
 
 ![Estado del Proyecto](https://img.shields.io/badge/Estado-Producción_Fase_1-success)
