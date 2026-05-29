@@ -1,4 +1,4 @@
-#Michell's Beauty Salon - Sistema Gestor de Citas
+Michell's Beauty Salon - Sistema Gestor de Citas
 
 <div align="center">
   <img src="./public/favicon-copia.png" alt="Logo Michell's Beauty Salon" width="250"/>
