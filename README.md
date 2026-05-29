@@ -1,7 +1,7 @@
-# 💇‍♀️ Michell's Beauty Salon - Sistema Gestor de Citas
+#Michell's Beauty Salon - Sistema Gestor de Citas
 
 <div align="center">
-  <img src="./public/logo_original.jpg" alt="Logo Michell's Beauty Salon" width="250"/>
+  <img src="./public/favicon-copia.png" alt="Logo Michell's Beauty Salon" width="250"/>
 </div>
 
 ![Estado del Proyecto](https://img.shields.io/badge/Estado-Producción_Fase_1-success)
