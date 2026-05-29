@@ -1,3 +1,4 @@
+import TimeInput from "@/features/horarios/components/atomos/TimeInput";
 import { WorkingDay } from "@/features/horarios/types/horarios.types";
 import { format, addDays } from "date-fns";
 
@@ -68,7 +69,6 @@ export default function HorarioCard({
           <div className="flex flex-wrap gap-3">
             {day.timeSlots.map((time, indexHora) => {
               const turnoBD = horariosBD.find((r) => {
-
                 const fechaHoraBD = r.fecha_hora
                   .substring(0, 16)
                   .replace("T", " ");
@@ -83,19 +83,17 @@ export default function HorarioCard({
 
               return (
                 <div
-                  key={`${day.id}-${time}-${indexHora}`}
+                  key={`${day.id}-${indexHora}`}
                   className={`flex items-center rounded-lg bg-surface-input border transition-colors
                     ${isOcupado ? "border-red-500/30 bg-red-500/5" : "border-border-dark focus-within:border-primary/50"}`}
                 >
-                  <input
-                    type="time"
-                    value={time}
-                    disabled={isOcupado} // 👈 Deshabilitamos si está ocupado
-                    onChange={(e) =>
-                      cambiarHoraLocal(indexDia, indexHora, e.target.value)
+                  <TimeInput
+                    time={time}
+                    disabled={isOcupado}
+                    isOcupado={isOcupado}
+                    onSave={(value) =>
+                      cambiarHoraLocal(indexDia, indexHora, value)
                     }
-                    className={`bg-transparent text-sm py-1.5 pl-3 outline-none w-[90px] 
-                      ${isOcupado ? "line-through text-red-400/70 cursor-not-allowed" : "text-cream-label"}`}
                   />
                   <button
                     disabled={isOcupado} // 👈 Evita que el admin lo borre si ya tiene reserva
