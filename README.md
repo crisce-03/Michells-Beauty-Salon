@@ -14,7 +14,7 @@
 
 Sistema integral de gestión de citas y administración desarrollado a la medida para **Michell's Beauty Salon**. Esta aplicación web de arquitectura Full-Stack nace con el objetivo de digitalizar y automatizar el agendamiento tradicional (previamente manejado de forma manual vía WhatsApp), eliminando la superposición de horarios, optimizando el tiempo administrativo y mejorando la experiencia de reserva para los clientes.
 
-## ✨ Características Principales (Fase 1)
+## ✨ Características Principales
 
 *   **📅 Motor de Agendamiento Inteligente:** Validación en tiempo real de la disponibilidad de bloques de tiempo para evitar cruces de horarios.
 *   **🛠️ Gestión de Catálogo Dinámico:** Panel administrativo (Dashboard) para crear, editar, categorizar y deshabilitar servicios estéticos.
@@ -22,7 +22,7 @@ Sistema integral de gestión de citas y administración desarrollado a la medida
 *   **💳 Seguimiento Transaccional:** Control del estado operativo de la cita (Pendiente, Confirmada, Cancelada).
 *   **🔒 Autenticación Segura:** Control de acceso, protección de rutas y gestión de sesiones nativa mediante **Supabase Auth** para resguardar la información administrativa.
 *   **📱 Diseño 100% Responsivo:** Interfaz optimizada tanto para equipos de escritorio (administración) como para dispositivos móviles.
-*   * **📲 Progressive Web App (PWA):** Instalable directamente en dispositivos móviles y de escritorio para ofrecer una experiencia de aplicación nativa, mejorando el acceso y los tiempos de carga.
+*   **📲 Progressive Web App (PWA):** Instalable directamente en dispositivos móviles y de escritorio para ofrecer una experiencia de aplicación nativa, mejorando el acceso y los tiempos de carga.
 
 ## 🚀 Tecnologías Utilizadas
 
@@ -35,6 +35,7 @@ El proyecto fue construido priorizando el rendimiento, la escalabilidad y una ex
 *   **Componentes UI:** [Shadcn UI](https://ui.shadcn.com/)
 
 **Backend & Base de Datos:**
+*   **API RESTful Personalizada:** Desarrollo de una capa lógica de backend utilizando el sistema de rutas API de Next.js (`/api`). Esto permite aislar la lógica de negocio, sanitizar datos y gestionar la comunicación segura con la base de datos, separando el Frontend del Backend de manera efectiva.
 *   **BaaS / Database:** [Supabase](https://supabase.com/) (PostgreSQL)
 *   **Autenticación:** Supabase Auth (Row Level Security implementado)
 
@@ -46,11 +47,3 @@ El sistema cuenta con un modelo relacional normalizado compuesto por 5 entidades
 3.  `Horarios`: Control de bloques temporales y disponibilidad.
 4.  `Citas`: Tabla transaccional central de reservas.
 5.  `Detalle_Cita`: Entidad puente para facturación de múltiples servicios por visita.
-
-## ⚙️ Instalación y Despliegue Local
-
-Sigue estos pasos para correr el proyecto en tu entorno local:
-
-1. **Clonar el repositorio:**
-```bash
-   git clone [https://github.com/TuUsuario/michells-beauty-salon.git](https://github.com/TuUsuario/michells-beauty-salon.git)
