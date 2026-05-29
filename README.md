@@ -1,5 +1,9 @@
 # 💇‍♀️ Michell's Beauty Salon - Sistema Gestor de Citas
 
+<div align="center">
+  <img src="./public/logo-michell.png" alt="Logo Michell's Beauty Salon" width="250"/>
+</div>
+
 ![Estado del Proyecto](https://img.shields.io/badge/Estado-Producción_Fase_1-success)
 ![Next.js](https://img.shields.io/badge/Next.js-14+-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?logo=typescript)
@@ -15,9 +19,10 @@ Sistema integral de gestión de citas y administración desarrollado a la medida
 *   **📅 Motor de Agendamiento Inteligente:** Validación en tiempo real de la disponibilidad de bloques de tiempo para evitar cruces de horarios.
 *   **🛠️ Gestión de Catálogo Dinámico:** Panel administrativo (Dashboard) para crear, editar, categorizar y deshabilitar servicios estéticos.
 *   **👥 Control de Cartera de Clientes:** Registro centralizado del historial de usuarios y su información de contacto.
-*   **💳 Seguimiento Transaccional:** Control del estado operativo de la cita (Pendiente, Confirmada, Cancelada) y su estado financiero (Pagado, Pendiente).
-*   **🔒 Autenticación Segura:** Control de acceso basado en roles mediante JWT para proteger la información administrativa.
+*   **💳 Seguimiento Transaccional:** Control del estado operativo de la cita (Pendiente, Confirmada, Cancelada).
+*   **🔒 Autenticación Segura:** Control de acceso, protección de rutas y gestión de sesiones nativa mediante **Supabase Auth** para resguardar la información administrativa.
 *   **📱 Diseño 100% Responsivo:** Interfaz optimizada tanto para equipos de escritorio (administración) como para dispositivos móviles.
+*   * **📲 Progressive Web App (PWA):** Instalable directamente en dispositivos móviles y de escritorio para ofrecer una experiencia de aplicación nativa, mejorando el acceso y los tiempos de carga.
 
 ## 🚀 Tecnologías Utilizadas
 
