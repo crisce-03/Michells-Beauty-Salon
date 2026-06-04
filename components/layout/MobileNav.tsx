@@ -26,7 +26,7 @@ export const MobileNav = ({ handleLogout, isLoggingOut }: MobileNavProps) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link href="/Reserve" className="flex items-center justify-center p-1.5 text-primary bg-primary/10 rounded-md">
+          <Link href="/dashboardAdmin/reserve" className="flex items-center justify-center p-1.5 text-primary bg-primary/10 rounded-md">
             <span className="material-symbols-outlined text-xl">calendar_add_on</span>
           </Link>
           <button onClick={handleLogout} disabled={isLoggingOut} className="flex items-center justify-center p-1.5 text-[#ef4444] hover:bg-[#ef4444]/10 rounded-md transition-colors">

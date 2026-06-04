@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useReserva }  from "@/features/reserve/hooks/useReserva";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import Link from "next/link";
 
 
 export default function Reserve() {
@@ -142,7 +143,31 @@ export default function Reserve() {
   };
 
   return (
-    <div className="bg-luxury-black min-h-screen">
+    <div className="bmx-auto max-w-7xl space-y-8 py-16 md:pt-8 xl:pt-0">
+      {/* Encabezado e Info */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <nav className="flex text-sm text-gray-500 dark:text-text-muted mb-2">
+            <Link
+              href="/dashboardAdmin"
+              className="hover:text-primary transition-colors"
+            >
+              Inicio
+            </Link>
+            <span className="mx-2 text-primary">/</span>
+            <span className="text-gray-900 font-medium dark:text-primary">
+              Reserva
+            </span>
+          </nav>
+          <h2 className="text-3xl font-bold tracking-tight text-cream-label">
+            Reserva
+          </h2>
+          <p className="text-text-muted mt-1">
+            Reserva de citas para Michell's Beauty en Santa
+            Ana.
+          </p>
+        </div>
+      </div>
       <main className="flex flex-col items-center">
         {/* Pasamos handleStepChange al ProgressBar para evitar que se salten pasos dando clic arriba */}
         <ProgressBar currentStep={step} setStep={handleStepChange} />
