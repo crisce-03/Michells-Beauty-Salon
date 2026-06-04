@@ -44,7 +44,7 @@ export const DesktopSidebar = ({ userEmail, handleLogout, isLoggingOut }: Deskto
 
       {/* Nueva Cita */}
       <div className="px-4 pb-2">
-        <Link href="/Reserve">
+        <Link href="/dashboardAdmin/reserve">
           <button className="flex items-center gap-3 w-full p-2 text-sm font-medium text-gray-500 dark:text-text-muted hover:text-primary dark:hover:text-primary hover:bg-primary/10 rounded-lg transition-colors group justify-center">
             <span className="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">
               calendar_add_on
