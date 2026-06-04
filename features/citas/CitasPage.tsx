@@ -73,7 +73,7 @@ export default function CitasPage() {
     cambiarEstado,
   } = useCitas();
   return (
-    <div className="mx-auto max-w-7xl space-y-8 pt-16 md:pt-8 xl:pt-0">
+    <div className="mx-auto max-w-7xl space-y-8 py-16 md:pt-8 xl:pt-0">
       
       {/* Encabezado */}
       <div className="space-y-4">

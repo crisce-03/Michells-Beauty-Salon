@@ -29,7 +29,7 @@ export default function EstadisticasPage() {
   return (
     // Estilo para la cuadrícula de las gráficas
 
-    <div className="mx-auto max-w-7xl space-y-8 pt-16 md:pt-8 xl:pt-0">
+    <div className="mx-auto max-w-7xl space-y-8 py-16 md:pt-8 xl:pt-0">
       {/* Encabezado e Info */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
